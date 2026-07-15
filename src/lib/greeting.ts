@@ -1,5 +1,5 @@
 /**
- * Time-of-day greeting from the device's local clock only — no network,
+ * Time-of-day greeting from the device's local clock only · no network,
  * no timezone service. Works fully offline.
  *
  * 5:00–11:59 → morning · 12:00–16:59 → afternoon · 17:00–20:59 → evening ·
@@ -12,7 +12,7 @@ export function greetingFor(now: Date = new Date()): string {
   return "Good evening";
 }
 
-/** "Good morning, Ammaar!" — or a neutral "Welcome!" when no name is set. */
+/** "Good morning, Ammaar!" · or a neutral "Welcome!" when no name is set. */
 export function greetingLine(name: string | null, now: Date = new Date()): string {
   return name ? `${greetingFor(now)}, ${name}!` : "Welcome!";
 }

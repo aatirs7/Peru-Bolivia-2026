@@ -19,7 +19,7 @@ function describe(code: number): { condition: string; icon: string } {
   if (code >= 80 && code <= 82) return { condition: "Showers", icon: "🌧️" };
   if (code === 85 || code === 86) return { condition: "Snow showers", icon: "🌨️" };
   if (code >= 95) return { condition: "Thunderstorm", icon: "⛈️" };
-  return { condition: "—", icon: "🌡️" };
+  return { condition: "-", icon: "🌡️" };
 }
 
 const toF = (c: number) => Math.round((c * 9) / 5 + 32);
@@ -37,7 +37,7 @@ function readCache(): WeatherSnapshot | null {
 
 export interface WeatherState {
   snapshot: WeatherSnapshot | null;
-  /** True when the snapshot is >6h old or we're offline — show the "as of" note. */
+  /** True when the snapshot is >6h old or we're offline · show the "as of" note. */
   stale: boolean;
   offline: boolean;
 }
@@ -93,7 +93,7 @@ export function useWeather(coords: Coords): WeatherState {
         localStorage.setItem(KEY, JSON.stringify(snap));
       } catch {}
     } catch {
-      // offline / blocked / API down — keep showing the cached value
+      // offline / blocked / API down · keep showing the cached value
     }
   }, []);
 

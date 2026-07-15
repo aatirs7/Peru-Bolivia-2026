@@ -19,7 +19,7 @@ export interface Contact {
   pinned?: boolean;
 }
 
-/** Big red quick-dial numbers — shown first, grouped by country. */
+/** Big red quick-dial numbers · shown first, grouped by country. */
 export interface EmergencyNumber {
   country: ContactCountry;
   service: string;
@@ -35,7 +35,7 @@ export const emergencyNumbers: EmergencyNumber[] = [
 
 export const familyContacts: Contact[] = [
   // Add each traveler's phone number so anyone separated can reach the group.
-  { name: "Adeel", role: "Trip lead — bookings & contact", pinned: true },
+  { name: "Adeel", role: "Trip lead · bookings & contact", pinned: true },
   { name: "Wajiha" },
   { name: "Abeer" },
   { name: "Aatir" },
@@ -53,10 +53,10 @@ export const stayContacts: Contact[] = [
     note: "Contact host via the Airbnb app (message thread works on wifi).",
   },
   {
-    name: "Cusco Hotel — first leg",
+    name: "Cusco Hotel · first leg",
     role: "Cusco · Jul 26–30",
     country: "Peru",
-    note: "Details still to be confirmed — add name, address & phone once known.",
+    note: "Details still to be confirmed · add name, address & phone once known.",
   },
   {
     name: "Mapi Garden's Machupicchu",
@@ -84,10 +84,10 @@ export const stayContacts: Contact[] = [
     role: "Uyuni · Aug 5–7",
     country: "Bolivia",
     place: PLACES.nidoFlamenco,
-    note: "Likely Hotel Nido del Flamenco — to be confirmed.",
+    note: "Likely Hotel Nido del Flamenco · to be confirmed.",
   },
   {
-    name: "La Paz lodging — final nights",
+    name: "La Paz lodging · final nights",
     role: "La Paz · Aug 7–9",
     country: "Bolivia",
     note: "Not booked yet.",
@@ -122,7 +122,7 @@ export const operatorContacts: Contact[] = [
 export const officialContacts: Contact[] = [
   {
     name: "U.S. Embassy Lima",
-    role: "American Citizen Services — 24/7 emergency line",
+    role: "American Citizen Services · 24/7 emergency line",
     country: "Peru",
     phone: "+5116182000",
     phoneLabel: "+51 1 618-2000",
@@ -141,7 +141,7 @@ export const officialContacts: Contact[] = [
     note: "After-hours emergencies: +591 2 216-8500.",
   },
   {
-    name: "U.S. State Dept — Overseas Citizens Services",
+    name: "U.S. State Dept · Overseas Citizens Services",
     role: "24/7, from abroad",
     country: "USA",
     phone: "+12025014444",

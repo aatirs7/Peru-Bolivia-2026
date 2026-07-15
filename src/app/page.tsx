@@ -14,7 +14,7 @@ type Tab = "day" | "summary" | "todo" | "contacts";
 export default function Page() {
   const [view, setView] = useView();
   const [tab, setTab] = useState<Tab>("day");
-  // null until mount — today is resolved client-side to avoid hydration mismatch
+  // null until mount · today is resolved client-side to avoid hydration mismatch
   const [dayIdx, setDayIdx] = useState<number | null>(null);
   const [todayIdx, setTodayIdx] = useState(0);
   const itineraryRef = useRef<HTMLDivElement>(null);
@@ -36,7 +36,7 @@ export default function Page() {
 
   const switchView = (v: View) => {
     setView(v);
-    // lead-only tabs close when leaving Trip Lead; contacts stays — it's family-safe
+    // lead-only tabs close when leaving Trip Lead; contacts stays · it's family-safe
     if (v === "family" && (tab === "summary" || tab === "todo")) setTab("day");
   };
 
@@ -55,8 +55,8 @@ export default function Page() {
     <div className="mx-auto min-h-screen max-w-lg px-4 pb-16">
       {/* header */}
       <header className="sticky top-0 z-10 -mx-4 border-b border-sand-200/80 bg-sand-100/90 px-4 pb-2.5 pt-3 backdrop-blur-md">
-        <div className="flex items-center justify-between gap-2">
-          <div className="min-w-0">
+        <div className="flex flex-col items-center gap-2">
+          <div className="min-w-0 text-center">
             <p className="truncate font-display text-[17px] font-bold leading-tight text-clay-600">
               Peru & Bolivia <span className="text-gold-600">2026</span>
             </p>
@@ -99,7 +99,7 @@ export default function Page() {
         </div>
 
         {view === "lead" && (
-          <nav aria-label="Trip lead tabs" className="mt-2.5 flex gap-1.5">
+          <nav aria-label="Trip lead tabs" className="mt-2.5 flex justify-center gap-1.5">
             {(
               [
                 ["day", "Itinerary"],
@@ -135,7 +135,7 @@ export default function Page() {
 
             <div ref={itineraryRef} className="scroll-mt-24">
               {/* day rail */}
-              <div className="mb-1 flex items-center justify-between">
+              <div className="mb-1 flex items-center justify-center gap-3">
                 <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-ink-faint">
                   Itinerary
                 </h2>

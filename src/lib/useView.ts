@@ -15,7 +15,7 @@ export function useView(): [View, (v: View) => void] {
       const saved = localStorage.getItem(KEY);
       if (saved === "lead" || saved === "family") setViewState(saved);
     } catch {
-      // storage unavailable (private mode) — stay on the in-memory default
+      // storage unavailable (private mode) · stay on the in-memory default
     }
   }, []);
 

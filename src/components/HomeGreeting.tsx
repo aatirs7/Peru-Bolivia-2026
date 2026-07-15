@@ -17,7 +17,7 @@ export default function HomeGreeting({
   const [name, setName] = useName();
   const [picking, setPicking] = useState(false);
   // `now` drives greeting + trip-day math; re-evaluated on mount and when the
-  // tab regains focus — everything is derived on-device, no polling, no network.
+  // tab regains focus · everything is derived on-device, no polling, no network.
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -59,11 +59,11 @@ export default function HomeGreeting({
           <circle cx="30" cy="18" r="12" className="text-gold-400/30" fill="currentColor" />
         </svg>
 
-        <h1 className="relative font-display text-[30px] font-semibold leading-tight tracking-tight text-ink">
+        <h1 className="relative text-center font-display text-[30px] font-semibold leading-tight tracking-tight text-ink">
           <button
             type="button"
             onClick={() => setPicking(true)}
-            className="text-left"
+            className="text-center"
             title="Tap to change who's greeted"
           >
             {greetingLine(name, now)}
@@ -71,13 +71,15 @@ export default function HomeGreeting({
         </h1>
 
         {name && !picking && (
-          <button
-            type="button"
-            onClick={() => setPicking(true)}
-            className="mt-0.5 text-[12px] text-ink-faint underline decoration-sand-300 underline-offset-2"
-          >
-            not you?
-          </button>
+          <div className="text-center">
+            <button
+              type="button"
+              onClick={() => setPicking(true)}
+              className="mt-0.5 text-[12px] text-ink-faint underline decoration-sand-300 underline-offset-2"
+            >
+              not you?
+            </button>
+          </div>
         )}
 
         {showPicker && (
@@ -91,14 +93,14 @@ export default function HomeGreeting({
           </div>
         )}
 
-        {/* at a glance — all computed on-device */}
-        <div className="mt-4 flex flex-wrap items-center gap-2.5">
+        {/* at a glance · all computed on-device */}
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-andes-600 px-3.5 py-1.5 text-[13px] font-bold text-sand-50">
             {phase === "before" && (
               <>🛫 T-minus {daysUntilDeparture(now)} day{daysUntilDeparture(now) === 1 ? "" : "s"}</>
             )}
             {phase === "during" && (
-              <>🏔️ Day {today.index} of {trip.days.length} — {today.route}</>
+              <>🏔️ Day {today.index} of {trip.days.length} · {today.route}</>
             )}
             {phase === "after" && <>Welcome home 🎉</>}
           </span>
@@ -114,7 +116,7 @@ export default function HomeGreeting({
         <WeatherChip coords={today.coords} />
 
         {phase !== "after" && (
-          <p className="mt-3 text-[11.5px] leading-snug text-ink-faint">
+          <p className="mt-3 text-center text-[11.5px] leading-snug text-ink-faint">
             📶 Before we lose signal: Google Maps → profile → Offline maps →
             download {OFFLINE_AREAS.join(", ")}.
           </p>

@@ -5,21 +5,21 @@ import StatusPill from "./StatusPill";
 export function SummaryPanel() {
   return (
     <section aria-label="Bookings summary">
-      <h2 className="mb-3 font-display text-[22px] font-semibold text-ink">
+      <h2 className="mb-3 text-center font-display text-[22px] font-semibold text-ink">
         Bookings summary
       </h2>
       <div className="space-y-2.5">
         {trip.summary.map((row, i) => (
           <div
             key={i}
-            className="rounded-2xl border border-sand-200 bg-white p-3.5 shadow-card"
+            className="rounded-2xl border border-sand-200 bg-white p-3.5 text-center shadow-card"
           >
-            <div className="flex items-start justify-between gap-3">
-              <p className="text-[14px] font-semibold leading-snug text-ink">
-                {row.segment}
-              </p>
+            <div className="flex justify-center">
               <StatusPill status={row.status} />
             </div>
+            <p className="mt-1.5 text-[14px] font-semibold leading-snug text-ink">
+              {row.segment}
+            </p>
             <p className="mt-1 text-[12.5px] text-ink-faint">
               {row.dates} · via {row.via}
             </p>
@@ -48,14 +48,14 @@ const tagCls: Record<TodoTag, string> = {
 export function TodoPanel() {
   return (
     <section aria-label="Things to confirm">
-      <h2 className="mb-3 font-display text-[22px] font-semibold text-ink">
+      <h2 className="mb-3 text-center font-display text-[22px] font-semibold text-ink">
         Things to confirm & notes
       </h2>
       <div className="space-y-2.5">
         {trip.todos.map((todo, i) => (
           <div
             key={i}
-            className="rounded-2xl border border-sand-200 bg-white p-3.5 shadow-card"
+            className="rounded-2xl border border-sand-200 bg-white p-3.5 text-center shadow-card"
           >
             <span
               className={`mb-1.5 inline-block rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${tagCls[todo.tag]}`}

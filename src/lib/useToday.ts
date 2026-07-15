@@ -1,6 +1,6 @@
 import { trip } from "@/data/trip";
 
-/** Local device date as YYYY-MM-DD — built from local components, no UTC drift. */
+/** Local device date as YYYY-MM-DD · built from local components, no UTC drift. */
 export function localISO(d: Date): string {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -11,7 +11,7 @@ export function localISO(d: Date): string {
 /**
  * 0-based index into trip.days for "today" on the device clock.
  * Before the trip → Day 1 (0); after → the last day; during → the matching day.
- * Assumes days[] is chronological (it is — the rail relies on it too).
+ * Assumes days[] is chronological (it is · the rail relies on it too).
  */
 export function todayIndex(now: Date = new Date()): number {
   const today = localISO(now);

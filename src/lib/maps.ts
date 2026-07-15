@@ -1,7 +1,7 @@
 import type { Place } from "@/types";
 
 /**
- * Google Maps universal deep-link — one consistent default everywhere.
+ * Google Maps universal deep-link · one consistent default everywhere.
  * Opens the Google Maps app when installed (Android & iOS), else the browser.
  * It's just an href: no fetch, no tiles, no runtime network. With the trip's
  * offline areas downloaded, Maps routes with zero connectivity.

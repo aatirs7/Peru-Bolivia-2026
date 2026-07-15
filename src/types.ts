@@ -16,7 +16,7 @@ export interface BookingCard {
   bookedVia?: string;
   /** Lead-only: passenger of record, balances due, contacts. */
   leadNote?: string;
-  /** Optional map pin — cards without one simply don't show the Directions link. */
+  /** Optional map pin · cards without one simply don't show the Directions link. */
   place?: Place;
 }
 
@@ -36,7 +36,7 @@ export type PlaceType = "hotel" | "station" | "airport" | "trailhead" | "tour";
 /**
  * A physical place a card can deep-link to in the device's map app.
  * Prefer fixed lat/lng (guaranteed to work offline); `query` is a name/address
- * fallback for places whose exact coordinates we don't have — Maps resolves it,
+ * fallback for places whose exact coordinates we don't have · Maps resolves it,
  * including inside downloaded offline areas.
  */
 export interface Place {
@@ -57,7 +57,7 @@ export interface Day {
   title: string;
   /** Short route/city label for the rail and at-a-glance strip. */
   route: string;
-  /** Where the family sleeps / spends the day — drives the weather location. */
+  /** Where the family sleeps / spends the day · drives the weather location. */
   coords: Coords;
   cards: BookingCard[];
   schedule: ScheduleItem[];

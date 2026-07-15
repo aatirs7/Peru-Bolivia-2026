@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Karla } from "next/font/google";
 import "./globals.css";
 
-// next/font self-hosts these at build time — they're precached with the app
+// next/font self-hosts these at build time · they're precached with the app
 // shell and render fully offline.
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -13,7 +13,7 @@ const karla = Karla({ subsets: ["latin"], variable: "--font-body" });
 
 export const metadata: Metadata = {
   title: "Peru & Bolivia 2026",
-  description: "Siddiqui family itinerary — Lima, Cusco, Machu Picchu, La Paz, Uyuni. Works offline.",
+  description: "Siddiqui family itinerary · Lima, Cusco, Machu Picchu, La Paz, Uyuni. Works offline.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,

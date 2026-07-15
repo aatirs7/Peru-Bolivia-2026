@@ -6,7 +6,7 @@ const KEY = "trip.name";
 
 /**
  * Per-device traveler name for the greeting, persisted in localStorage.
- * `name` is null until chosen (or if storage is unavailable) — the greeting
+ * `name` is null until chosen (or if storage is unavailable) · the greeting
  * falls back to a neutral "Welcome!" in that case.
  */
 export function useName(): [string | null, (n: string | null) => void] {

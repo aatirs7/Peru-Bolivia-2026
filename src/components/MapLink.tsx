@@ -10,7 +10,7 @@ const typeIcon: Record<PlaceType, string> = {
 };
 
 /**
- * A plain href into the device's map app — never fetches, never renders tiles.
+ * A plain href into the device's map app · never fetches, never renders tiles.
  * With the trip's offline areas downloaded, Maps routes with zero connectivity.
  */
 export default function MapLink({

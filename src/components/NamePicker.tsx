@@ -9,8 +9,8 @@ export default function NamePicker({
 }) {
   return (
     <div>
-      <p className="text-[13px] font-medium text-ink-soft">Who's this?</p>
-      <div className="mt-2 flex flex-wrap gap-2">
+      <p className="text-center text-[13px] font-medium text-ink-soft">Who's this?</p>
+      <div className="mt-2 flex flex-wrap justify-center gap-2">
         {trip.travelers.map((t) => (
           <button
             key={t}

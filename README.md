@@ -1,4 +1,4 @@
-# Peru & Bolivia 2026 — Siddiqui Family
+# Peru & Bolivia 2026 · Siddiqui Family
 
 Phone-first, **offline-capable** PWA showing the family's 18-day Peru + Bolivia
 itinerary (Jul 23 – Aug 9, 2026). Opens to **today**, with a personalized
@@ -6,7 +6,7 @@ greeting homepage, per-device **Family / Trip Lead** views, map deep-links,
 cache-then-refresh weather, and an offline Emergency & Contacts screen.
 
 All trip content is static TypeScript in `src/data/trip.ts` (contacts in
-`src/data/contacts.ts`) — no database, no API, no auth. See
+`src/data/contacts.ts`) · no database, no API, no auth. See
 `peru-trip-SPEC.md` for the full working brief.
 
 ## Commands
@@ -34,4 +34,4 @@ departure.
 
 ## Deploy
 
-Vercel (framework preset: Next.js) or any static host — it's just files in `out/`.
+Vercel (framework preset: Next.js) or any static host · it's just files in `out/`.

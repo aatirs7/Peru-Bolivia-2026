@@ -1,13 +1,13 @@
 import type { Coords, Place, Trip } from "@/types";
 
-// Fixed city coordinates for the offline weather lookup — no geocoding, ever.
+// Fixed city coordinates for the offline weather lookup · no geocoding, ever.
 const LIMA: Coords = { lat: -12.119, lng: -77.029, label: "Lima" };
 const CUSCO: Coords = { lat: -13.532, lng: -71.967, label: "Cusco" };
 const AGUAS: Coords = { lat: -13.155, lng: -72.525, label: "Aguas Calientes" };
 const LA_PAZ: Coords = { lat: -16.5, lng: -68.15, label: "La Paz" };
 const UYUNI: Coords = { lat: -20.464, lng: -66.825, label: "Uyuni" };
 
-// Map pins — fixed lat/lng where known (works offline), name query otherwise.
+// Map pins · fixed lat/lng where known (works offline), name query otherwise.
 export const PLACES = {
   iad: { type: "airport", label: "Dulles Airport (IAD)", lat: 38.9531, lng: -77.4565 },
   lim: { type: "airport", label: "Jorge Chávez Airport (LIM)", lat: -12.0219, lng: -77.1143 },
@@ -33,7 +33,7 @@ export const PLACES = {
 
 export const trip: Trip = {
   title: "Peru & Bolivia 2026",
-  subtitle: "Siddiqui Family Tour — Lima · Cusco · Machu Picchu · La Paz · Uyuni",
+  subtitle: "Siddiqui Family Tour · Lima · Cusco · Machu Picchu · La Paz · Uyuni",
   start: "2026-07-23",
   end: "2026-08-09",
   travelers: ["Adeel", "Wajiha", "Abeer", "Aatir", "Aashir", "Ammaar"],
@@ -49,14 +49,14 @@ export const trip: Trip = {
       cards: [
         {
           kind: "flight",
-          title: "Avianca — via Bogotá",
+          title: "Avianca · via Bogotá",
           status: "confirmed",
           lines: [
             "IAD 6:50 AM → BOG (2h 15m layover) → LIM 4:30 PM",
             "10h 40m · 1 stop · Economy · 6 travelers",
           ],
           ref: "BANUIE",
-          bookedVia: "JustFly — booking #299-502-632",
+          bookedVia: "JustFly · booking #299-502-632",
           place: PLACES.iad,
         },
         {
@@ -72,10 +72,10 @@ export const trip: Trip = {
         },
       ],
       schedule: [
-        { time: "3:50–4:20 AM", text: "Arrive Dulles (IAD), check in + security — international, arrive ~3 hrs early" },
+        { time: "3:50–4:20 AM", text: "Arrive Dulles (IAD), check in + security · international, arrive ~3 hrs early" },
         { time: "6:50 AM", text: "Depart IAD (Avianca)" },
-        { time: "Layover", text: "Bogotá (BOG) — 2h 15m, stay near gate" },
-        { time: "4:30 PM", text: "Arrive Lima (LIM) — passport control + baggage" },
+        { time: "Layover", text: "Bogotá (BOG) · 2h 15m, stay near gate" },
+        { time: "4:30 PM", text: "Arrive Lima (LIM) · passport control + baggage" },
         { time: "5:00–5:15 PM", text: "Withdraw Peruvian soles (PEN) from ATM in arrivals" },
         { time: "5:15–6:15 PM", text: "Registered taxi / Uber to Miraflores apartment (~40–60 min)" },
         { time: "6:15–7:00 PM", text: "Check in, settle" },
@@ -86,35 +86,35 @@ export const trip: Trip = {
       index: 2,
       date: "2026-07-24",
       weekday: "Friday",
-      title: "Lima — Miraflores & Barranco",
+      title: "Lima · Miraflores & Barranco",
       route: "Lima",
       coords: LIMA,
       cards: [],
       schedule: [
         { time: "9:00–10:00 AM", text: "Breakfast near apartment" },
-        { time: "10:00–1:00 PM", text: "Miraflores — Malecón boardwalk, Parque Kennedy, Larcomar" },
+        { time: "10:00–1:00 PM", text: "Miraflores · Malecón boardwalk, Parque Kennedy, Larcomar" },
         { time: "1:00–2:30 PM", text: "Lunch (Lima is famous for ceviche & seafood)" },
-        { time: "2:30–6:00 PM", text: "Barranco — Bridge of Sighs, street art, waterfront" },
+        { time: "2:30–6:00 PM", text: "Barranco · Bridge of Sighs, street art, waterfront" },
         { time: "7:00–9:00 PM", text: "Dinner" },
       ],
-      note: "Suggested day — swap freely. Look up halal-friendly / seafood spots in Miraflores.",
+      note: "Suggested day · swap freely. Look up halal-friendly / seafood spots in Miraflores.",
     },
     {
       index: 3,
       date: "2026-07-25",
       weekday: "Saturday",
-      title: "Lima — Historic Center & museums",
+      title: "Lima · Historic Center & museums",
       route: "Lima",
       coords: LIMA,
       cards: [],
       schedule: [
         { time: "9:00–10:00 AM", text: "Breakfast" },
-        { time: "10:00–1:00 PM", text: "Historic Center — Plaza Mayor, Cathedral, San Francisco Monastery" },
+        { time: "10:00–1:00 PM", text: "Historic Center · Plaza Mayor, Cathedral, San Francisco Monastery" },
         { time: "1:00–2:30 PM", text: "Lunch" },
         { time: "2:30–5:30 PM", text: "Museo Larco (garden café) or return to Barranco" },
         { time: "7:00–9:00 PM", text: "Dinner" },
       ],
-      note: "Huacachina (desert oasis near Ica) was considered from Lima but decided against — “too hectic, not feasible.”",
+      note: "Huacachina (desert oasis near Ica) was considered from Lima but decided against · “too hectic, not feasible.”",
     },
     {
       index: 4,
@@ -126,7 +126,7 @@ export const trip: Trip = {
       cards: [
         {
           kind: "flight",
-          title: "JetSMART — direct",
+          title: "JetSMART · direct",
           status: "confirmed",
           lines: [
             "Flight JA7041 · LIM 6:50 PM → CUZ 8:15 PM · Direct",
@@ -138,13 +138,13 @@ export const trip: Trip = {
         },
         {
           kind: "stay",
-          title: "Cusco Hotel — first leg",
+          title: "Cusco Hotel · first leg",
           status: "to_confirm",
           lines: [
             "Jul 26 → Jul 30 (4 nights)",
-            "Booked per group chat — name / address / confirmation # still needed",
+            "Booked per group chat · name / address / confirmation # still needed",
           ],
-          bookedVia: "— (source TBC)",
+          bookedVia: "- (source TBC)",
         },
       ],
       schedule: [
@@ -154,7 +154,7 @@ export const trip: Trip = {
         { time: "3:30–4:30 PM", text: "Head to LIM airport" },
         { time: "6:50–8:15 PM", text: "Flight to Cusco (JA7041)" },
         { time: "8:15–9:00 PM", text: "Land Cusco, transfer to hotel" },
-        { time: "9:00 PM", text: "Rest — take it easy for altitude (Cusco ~3,400 m)" },
+        { time: "9:00 PM", text: "Rest · take it easy for altitude (Cusco ~3,400 m)" },
       ],
       warn: "Altitude: hydrate, coca tea, no heavy exertion tonight. If using Diamox/acetazolamide, follow your doctor's timing (usually started a day or two prior).",
     },
@@ -162,7 +162,7 @@ export const trip: Trip = {
       index: 5,
       date: "2026-07-27",
       weekday: "Monday",
-      title: "Cusco — acclimatization & city",
+      title: "Cusco · acclimatization & city",
       route: "Cusco",
       coords: CUSCO,
       cards: [],
@@ -173,13 +173,13 @@ export const trip: Trip = {
         { time: "2:30–5:30 PM", text: "San Blas neighborhood, San Pedro Market" },
         { time: "7:00–9:00 PM", text: "Dinner" },
       ],
-      note: "Keep today light. Tomorrow's Rainbow Mountain sits above 5,000 m — the tour operator recommends 1–2 acclimatization days in Cusco first. This is your one buffer day before it.",
+      note: "Keep today light. Tomorrow's Rainbow Mountain sits above 5,000 m · the tour operator recommends 1–2 acclimatization days in Cusco first. This is your one buffer day before it.",
     },
     {
       index: 6,
       date: "2026-07-28",
       weekday: "Tuesday",
-      title: "Cusco — Rainbow Mountain (Vinicunca)",
+      title: "Cusco · Rainbow Mountain (Vinicunca)",
       route: "Rainbow Mtn",
       coords: CUSCO,
       cards: [
@@ -193,7 +193,7 @@ export const trip: Trip = {
           ],
           ref: "Receipt ML3526LC",
           bookedVia: "Mystic Lands Peru (direct)",
-          leadNote: "Total $420 USD — balance due on site · tips not included.",
+          leadNote: "Total $420 USD · balance due on site · tips not included.",
           place: PLACES.vinicunca,
         },
       ],
@@ -209,16 +209,16 @@ export const trip: Trip = {
       index: 7,
       date: "2026-07-29",
       weekday: "Wednesday",
-      title: "Cusco — Sacred Valley (flexible)",
+      title: "Cusco · Sacred Valley (flexible)",
       route: "Sacred Valley",
       coords: CUSCO,
       cards: [],
       schedule: [
         { time: "7:00–8:00 AM", text: "Breakfast" },
-        { time: "8:00–6:00 PM", text: "Sacred Valley — Pisac ruins & market, Ollantaytambo, Maras / Moray" },
+        { time: "8:00–6:00 PM", text: "Sacred Valley · Pisac ruins & market, Ollantaytambo, Maras / Moray" },
         { time: "7:30–9:00 PM", text: "Dinner in Cusco, pack for Machu Picchu" },
       ],
-      note: "Sacred Valley isn't a booked tour yet — this day is flexible (swap with Jul 27 if you prefer). Only Rainbow Mountain (Jul 28) is fixed.",
+      note: "Sacred Valley isn't a booked tour yet · this day is flexible (swap with Jul 27 if you prefer). Only Rainbow Mountain (Jul 28) is fixed.",
     },
     {
       index: 8,
@@ -230,7 +230,7 @@ export const trip: Trip = {
       cards: [
         {
           kind: "train",
-          title: "PeruRail — Vistadome Observatory 303",
+          title: "PeruRail · Vistadome Observatory 303",
           status: "confirmed",
           lines: [
             "Ollantaytambo 1:27 PM → Aguas Calientes 2:50 PM",
@@ -238,7 +238,7 @@ export const trip: Trip = {
           ],
           ref: "Vistadome 303",
           bookedVia: "PeruRail (book.perurail.com)",
-          leadNote: "Passenger of record: Adeel Siddiqui (doc 679093755) — party on same booking.",
+          leadNote: "Passenger of record: Adeel Siddiqui (doc 679093755) · party on same booking.",
           place: PLACES.ollantaStation,
         },
         {
@@ -247,13 +247,13 @@ export const trip: Trip = {
           status: "gap",
           lines: [
             "The train departs from Ollantaytambo, not Cusco",
-            "~1.5–2 hrs by car/van this morning — not seen booked",
+            "~1.5–2 hrs by car/van this morning · not seen booked",
           ],
           place: PLACES.ollantaStation,
         },
         {
           kind: "tour",
-          title: "Machu Picchu — Circuit 2 (2-day) · Day 1",
+          title: "Machu Picchu · Circuit 2 (2-day) · Day 1",
           status: "booked",
           lines: [
             "On arrival in Aguas Calientes, meet the ticket coordinator at the train station",
@@ -287,7 +287,7 @@ export const trip: Trip = {
         { time: "4:30–7:00 PM", text: "Explore town / optional hot springs" },
         { time: "7:30–9:00 PM", text: "Dinner, early night" },
       ],
-      warn: "Bring original physical passports for every traveler — registration happens today at the station.",
+      warn: "Bring original physical passports for every traveler · registration happens today at the station.",
     },
     {
       index: 9,
@@ -299,7 +299,7 @@ export const trip: Trip = {
       cards: [
         {
           kind: "tour",
-          title: "Machu Picchu — Circuit 2 (2-day) · Day 2",
+          title: "Machu Picchu · Circuit 2 (2-day) · Day 2",
           status: "booked",
           lines: [
             "Bus up from Aguas Calientes ~1 hr before your entry time (window 6 AM–3 PM, set at yesterday's appointment)",
@@ -311,12 +311,12 @@ export const trip: Trip = {
       ],
       schedule: [
         { time: "Early AM", text: "Breakfast; bus queue up to the citadel (~30 min ride)" },
-        { time: "Entry time", text: "Machu Picchu — guided Circuit 2 (2.5 hrs)" },
+        { time: "Entry time", text: "Machu Picchu · guided Circuit 2 (2.5 hrs)" },
         { time: "Midday", text: "Return bus to Aguas Calientes, lunch" },
         { time: "Afternoon", text: "Rest / hot springs" },
         { time: "7:00–8:30 PM", text: "Dinner" },
       ],
-      warn: "Bring original physical passport — required for entry (strictly enforced).",
+      warn: "Bring original physical passport · required for entry (strictly enforced).",
       note: "Your exact entry time is chosen when you pick up tickets. Plan the bus around it once you know it.",
     },
     {
@@ -329,7 +329,7 @@ export const trip: Trip = {
       cards: [
         {
           kind: "train",
-          title: "PeruRail — Expedition 84P",
+          title: "PeruRail · Expedition 84P",
           status: "confirmed",
           lines: [
             "Aguas Calientes 6:20 PM → Ollantaytambo 8:05 PM",
@@ -373,7 +373,7 @@ export const trip: Trip = {
       index: 11,
       date: "2026-08-02",
       weekday: "Sunday",
-      title: "Cusco — free / buffer day",
+      title: "Cusco · free / buffer day",
       route: "Cusco",
       coords: CUSCO,
       cards: [],
@@ -393,11 +393,11 @@ export const trip: Trip = {
       cards: [
         {
           kind: "flight",
-          title: "Cusco → La Paz — direct",
+          title: "Cusco → La Paz · direct",
           status: "confirmed",
           lines: ["CUZ 12:30 PM → LPB 2:45 PM · Direct · 1h 15m · Economy"],
           ref: "BCL2SZ",
-          bookedVia: "JustFly — booking #299-889-112",
+          bookedVia: "JustFly · booking #299-889-112",
           place: PLACES.cuz,
         },
         {
@@ -418,7 +418,7 @@ export const trip: Trip = {
         { time: "3:00–4:00 PM", text: "Arrive, transfer to Kawsay Apart" },
         { time: "Evening", text: "Light dinner, rest" },
       ],
-      warn: "Confirm Bolivia entry requirements for US passports before travel. Altitude jumps again — La Paz ~3,600 m, El Alto airport ~4,060 m (one of the world's highest).",
+      warn: "Confirm Bolivia entry requirements for US passports before travel. Altitude jumps again · La Paz ~3,600 m, El Alto airport ~4,060 m (one of the world's highest).",
     },
     {
       index: 13,
@@ -446,11 +446,11 @@ export const trip: Trip = {
       cards: [
         {
           kind: "flight",
-          title: "Boliviana de Aviación — OB304, direct",
+          title: "Boliviana de Aviación · OB304, direct",
           status: "confirmed",
           lines: ["LPB 8:45 AM → UYU 9:45 AM · Direct · 1h · Economy"],
           ref: "EWZH2B · PNR BCYY4B",
-          bookedVia: "JustFly — booking #299-891-102",
+          bookedVia: "JustFly · booking #299-891-102",
           place: PLACES.lpb,
         },
         {
@@ -459,7 +459,7 @@ export const trip: Trip = {
           status: "to_confirm",
           lines: [
             "Likely Hotel Nido del Flamenco (the salt-flats operator is a hotel)",
-            "Room booking wasn't shared — confirm nights of Aug 5 & 6",
+            "Room booking wasn't shared · confirm nights of Aug 5 & 6",
           ],
           place: PLACES.nidoFlamenco,
         },
@@ -481,14 +481,14 @@ export const trip: Trip = {
       cards: [
         {
           kind: "tour",
-          title: "Salar de Uyuni — Full-Day Tour",
+          title: "Salar de Uyuni · Full-Day Tour",
           status: "booked",
           lines: [
             "6 pax · private car with English-speaking guide",
             "Includes transport, lunch/snacks, water boots",
           ],
           bookedVia: "Hotel Nido del Flamenco (direct)",
-          leadNote: "Total $450 USD — balance due on site · not incl: restrooms, attraction entry fees · +591 68779297",
+          leadNote: "Total $450 USD · balance due on site · not incl: restrooms, attraction entry fees · +591 68779297",
           place: PLACES.nidoFlamenco,
         },
       ],
@@ -509,14 +509,14 @@ export const trip: Trip = {
       cards: [
         {
           kind: "flight",
-          title: "Boliviana de Aviación — OB305, direct",
+          title: "Boliviana de Aviación · OB305, direct",
           status: "confirmed",
           lines: [
             "UYU 8:40 AM → LPB 9:40 AM · Direct · 1h · Economy",
-            "Rescheduled — was 10:15 AM, now 8:40 AM departure",
+            "Rescheduled · was 10:15 AM, now 8:40 AM departure",
           ],
           ref: "PNR BCYY4B",
-          bookedVia: "JustFly — booking #299-891-102",
+          bookedVia: "JustFly · booking #299-891-102",
           place: PLACES.uyu,
         },
         {
@@ -524,7 +524,7 @@ export const trip: Trip = {
           title: "La Paz lodging (Aug 7 → Aug 9, 2 nights)",
           status: "gap",
           lines: [
-            "Not seen booked — nights of Aug 7 & 8 needed back in La Paz",
+            "Not seen booked · nights of Aug 7 & 8 needed back in La Paz",
             "Before the 3:25 AM Aug 9 flight home (Kawsay Apart only covered Aug 3–5)",
           ],
         },
@@ -540,14 +540,14 @@ export const trip: Trip = {
       index: 17,
       date: "2026-08-08",
       weekday: "Saturday",
-      title: "La Paz — last full day",
+      title: "La Paz · last full day",
       route: "La Paz",
       coords: LA_PAZ,
       cards: [],
       schedule: [
         { time: "Day", text: "Anything missed in La Paz; souvenirs; pack early" },
         { time: "Evening", text: "Early dinner, full packing, short rest before the airport run" },
-        { time: "~11:30 PM", text: "Wind down — very early departure tonight" },
+        { time: "~11:30 PM", text: "Wind down · very early departure tonight" },
       ],
       warn: "Heads-up: the flight home leaves at 3:25 AM on Aug 9, so you'll actually leave your La Paz lodging around 12:30–1:00 AM. Plan lodging + airport transport accordingly.",
     },
@@ -561,14 +561,14 @@ export const trip: Trip = {
       cards: [
         {
           kind: "flight",
-          title: "Avianca — via Bogotá",
+          title: "Avianca · via Bogotá",
           status: "confirmed",
           lines: [
             "LPB 3:25 AM → BOG (1h 30m layover) → IAD 2:15 PM",
             "10h 50m · 1 stop · Economy",
           ],
           ref: "BANUIE",
-          bookedVia: "JustFly — booking #299-502-632",
+          bookedVia: "JustFly · booking #299-502-632",
           place: PLACES.lpb,
         },
       ],
@@ -576,8 +576,8 @@ export const trip: Trip = {
         { time: "12:30–1:00 AM", text: "Leave La Paz lodging for El Alto airport (LPB)" },
         { time: "1:15–2:30 AM", text: "Check in + security" },
         { time: "3:25 AM", text: "Depart La Paz" },
-        { time: "Layover", text: "Bogotá — 1h 30m (tight)" },
-        { time: "2:15 PM", text: "Land at Dulles (IAD) — Welcome home. Alhamdulillah." },
+        { time: "Layover", text: "Bogotá · 1h 30m (tight)" },
+        { time: "2:15 PM", text: "Land at Dulles (IAD) · Welcome home. Alhamdulillah." },
       ],
       warn: "Tight connection: the 1h 30m in Bogotá is short (JustFly flagged it). Know your BOG gate/terminal in advance and move quickly.",
     },
@@ -619,35 +619,35 @@ export const trip: Trip = {
       reference: "299-891-102 · EWZH2B · BCYY4B",
     },
     {
-      segment: "Home in Miraflores — Lima",
+      segment: "Home in Miraflores · Lima",
       dates: "Jul 23–26",
       via: "Airbnb",
       status: "confirmed",
       reference: "Av. 28 de Julio 639",
     },
     {
-      segment: "Cusco Hotel — first leg",
+      segment: "Cusco Hotel · first leg",
       dates: "Jul 26–30",
       via: "TBC",
       status: "to_confirm",
       reference: "details needed",
     },
     {
-      segment: "Mapi Garden's Machupicchu — Aguas Calientes",
+      segment: "Mapi Garden's Machupicchu · Aguas Calientes",
       dates: "Jul 30–Aug 1",
       via: "Booking.com",
       status: "confirmed",
       reference: "6093685720 · PIN 1485",
     },
     {
-      segment: "RHOUSE Cusco — return leg",
+      segment: "RHOUSE Cusco · return leg",
       dates: "Aug 1–3",
       via: "Booking.com",
       status: "confirmed",
       reference: "5057021282 · PIN 3396",
     },
     {
-      segment: "Kawsay Apart — La Paz",
+      segment: "Kawsay Apart · La Paz",
       dates: "Aug 3–5",
       via: "Booking.com",
       status: "confirmed",
@@ -661,9 +661,9 @@ export const trip: Trip = {
       reference: "confirm room nights",
     },
     {
-      segment: "La Paz lodging — final nights",
+      segment: "La Paz lodging · final nights",
       dates: "Aug 7–9",
-      via: "—",
+      via: "-",
       status: "gap",
       reference: "not booked",
     },
@@ -692,7 +692,7 @@ export const trip: Trip = {
   todos: [
     {
       tag: "GAP",
-      text: "La Paz lodging for Aug 7–9. After Uyuni you're back in La Paz for two nights before the 3:25 AM departure — nothing booked for this stretch yet.",
+      text: "La Paz lodging for Aug 7–9. After Uyuni you're back in La Paz for two nights before the 3:25 AM departure · nothing booked for this stretch yet.",
     },
     {
       tag: "CONFIRM",
@@ -700,19 +700,19 @@ export const trip: Trip = {
     },
     {
       tag: "CONFIRM",
-      text: "Cusco first-leg hotel (Jul 26–30). The only booking whose screenshot never came through — need name, address, confirmation # & booking source.",
+      text: "Cusco first-leg hotel (Jul 26–30). The only booking whose screenshot never came through · need name, address, confirmation # & booking source.",
     },
     {
       tag: "GAP",
-      text: "Cusco ⇄ Ollantaytambo ground transport (Jul 30 out, Aug 1 back). The train starts/ends at Ollantaytambo, ~2 hrs from Cusco each way — arrange a private car or colectivo.",
+      text: "Cusco ⇄ Ollantaytambo ground transport (Jul 30 out, Aug 1 back). The train starts/ends at Ollantaytambo, ~2 hrs from Cusco each way · arrange a private car or colectivo.",
     },
     {
       tag: "PASSPORTS",
-      text: "Machu Picchu requires original physical passports for every traveler — photocopies/digital not accepted. Registration happens Jul 30 on arrival in Aguas Calientes.",
+      text: "Machu Picchu requires original physical passports for every traveler · photocopies/digital not accepted. Registration happens Jul 30 on arrival in Aguas Calientes.",
     },
     {
       tag: "CASH",
-      text: "Tour balances are due on site: Rainbow Mountain $420, Salar de Uyuni $450 — plus small cash for Uyuni attraction entry fees and horse/snack costs at Rainbow Mountain.",
+      text: "Tour balances are due on site: Rainbow Mountain $420, Salar de Uyuni $450 · plus small cash for Uyuni attraction entry fees and horse/snack costs at Rainbow Mountain.",
     },
     {
       tag: "HEALTH",
@@ -720,11 +720,11 @@ export const trip: Trip = {
     },
     {
       tag: "WATCH",
-      text: "Return connection in Bogotá is only 1h 30m — tight for an international transfer. Know the gate ahead of time.",
+      text: "Return connection in Bogotá is only 1h 30m · tight for an international transfer. Know the gate ahead of time.",
     },
     {
       tag: "DOCS",
-      text: "Per-passenger seat assignments weren't in the confirmations shared — assign/verify seats at check-in. Bookings are held for all 6 travelers.",
+      text: "Per-passenger seat assignments weren't in the confirmations shared · assign/verify seats at check-in. Bookings are held for all 6 travelers.",
     },
   ],
 };

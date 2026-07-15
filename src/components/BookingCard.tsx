@@ -16,17 +16,17 @@ export default function BookingCard({ card, view }: { card: Card; view: View }) 
   const isGap = card.status === "gap";
   return (
     <div
-      className={`rounded-2xl border bg-white p-4 shadow-card ${
+      className={`rounded-2xl border bg-white p-4 text-center shadow-card ${
         isGap ? "border-alert-600/30 bg-alert-100/40" : "border-sand-200"
       }`}
     >
-      <div className="flex items-start justify-between gap-3">
-        <p className="font-display text-[15px] font-semibold leading-snug text-ink">
-          <span aria-hidden className="mr-1.5">{kindIcon[card.kind]}</span>
-          {card.title}
-        </p>
+      <div className="flex justify-center">
         <StatusPill status={card.status} />
       </div>
+      <p className="mt-2 font-display text-[15px] font-semibold leading-snug text-ink">
+        <span aria-hidden className="mr-1.5">{kindIcon[card.kind]}</span>
+        {card.title}
+      </p>
 
       <ul className="mt-2 space-y-1">
         {card.lines.map((line, i) => (
