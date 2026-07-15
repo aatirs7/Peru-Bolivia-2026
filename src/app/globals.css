@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  @apply bg-sand-100 font-body text-ink antialiased;
+  /* faint woven-textile texture */
+  background-image: repeating-linear-gradient(
+      45deg,
+      rgba(184, 84, 47, 0.025) 0px,
+      rgba(184, 84, 47, 0.025) 1px,
+      transparent 1px,
+      transparent 12px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(62, 92, 75, 0.02) 0px,
+      rgba(62, 92, 75, 0.02) 1px,
+      transparent 1px,
+      transparent 12px
+    );
+  /* keep content clear of the iPhone notch / home bar when installed */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* horizontal day rail: momentum scroll, hidden scrollbar */
+.rail {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
