@@ -6,20 +6,20 @@ import type { Coords, WeatherSnapshot } from "@/types";
 const KEY = "trip.weather";
 const STALE_MS = 6 * 60 * 60 * 1000; // ~6 hours
 
-/** WMO weather_code → simple condition + emoji. */
+/** WMO weather_code → condition text + line-icon key (mapped to lucide in the UI). */
 function describe(code: number): { condition: string; icon: string } {
-  if (code === 0) return { condition: "Clear", icon: "☀️" };
-  if (code === 1) return { condition: "Mostly clear", icon: "🌤️" };
-  if (code === 2) return { condition: "Partly cloudy", icon: "⛅" };
-  if (code === 3) return { condition: "Overcast", icon: "☁️" };
-  if (code === 45 || code === 48) return { condition: "Fog", icon: "🌫️" };
-  if (code >= 51 && code <= 57) return { condition: "Drizzle", icon: "🌦️" };
-  if (code >= 61 && code <= 67) return { condition: "Rain", icon: "🌧️" };
-  if (code >= 71 && code <= 77) return { condition: "Snow", icon: "🌨️" };
-  if (code >= 80 && code <= 82) return { condition: "Showers", icon: "🌧️" };
-  if (code === 85 || code === 86) return { condition: "Snow showers", icon: "🌨️" };
-  if (code >= 95) return { condition: "Thunderstorm", icon: "⛈️" };
-  return { condition: "-", icon: "🌡️" };
+  if (code === 0) return { condition: "Clear", icon: "sun" };
+  if (code === 1) return { condition: "Mostly clear", icon: "sun-cloud" };
+  if (code === 2) return { condition: "Partly cloudy", icon: "sun-cloud" };
+  if (code === 3) return { condition: "Overcast", icon: "cloud" };
+  if (code === 45 || code === 48) return { condition: "Fog", icon: "fog" };
+  if (code >= 51 && code <= 57) return { condition: "Drizzle", icon: "drizzle" };
+  if (code >= 61 && code <= 67) return { condition: "Rain", icon: "rain" };
+  if (code >= 71 && code <= 77) return { condition: "Snow", icon: "snow" };
+  if (code >= 80 && code <= 82) return { condition: "Showers", icon: "rain" };
+  if (code === 85 || code === 86) return { condition: "Snow showers", icon: "snow" };
+  if (code >= 95) return { condition: "Thunderstorm", icon: "storm" };
+  return { condition: "Weather", icon: "thermometer" };
 }
 
 const toF = (c: number) => Math.round((c * 9) / 5 + 32);
@@ -54,7 +54,6 @@ export interface WeatherState {
 export function useWeather(coords: Coords): WeatherState {
   const [snapshot, setSnapshot] = useState<WeatherSnapshot | null>(null);
   const [offline, setOffline] = useState(false);
-  const [, forceTick] = useState(0);
   const coordsRef = useRef(coords);
   coordsRef.current = coords;
 
@@ -117,10 +116,7 @@ export function useWeather(coords: Coords): WeatherState {
     };
     const onOffline = () => setOffline(true);
     const onVisible = () => {
-      if (document.visibilityState === "visible") {
-        forceTick((t) => t + 1); // re-evaluate staleness
-        void refresh();
-      }
+      if (document.visibilityState === "visible") void refresh();
     };
     window.addEventListener("online", onOnline);
     window.addEventListener("offline", onOffline);

@@ -5,14 +5,14 @@ import StatusPill from "./StatusPill";
 export function SummaryPanel() {
   return (
     <section aria-label="Bookings summary">
-      <h2 className="mb-3 text-center font-display text-[22px] font-semibold text-ink">
+      <h2 className="mb-3 text-center text-[20px] font-semibold tracking-tight text-ink">
         Bookings summary
       </h2>
       <div className="space-y-2.5">
         {trip.summary.map((row, i) => (
           <div
             key={i}
-            className="rounded-2xl border border-sand-200 bg-white p-3.5 text-center shadow-card"
+            className="rounded-xl border border-sand-200/70 bg-white p-4 text-center shadow-card"
           >
             <div className="flex justify-center">
               <StatusPill status={row.status} />
@@ -48,17 +48,17 @@ const tagCls: Record<TodoTag, string> = {
 export function TodoPanel() {
   return (
     <section aria-label="Things to confirm">
-      <h2 className="mb-3 text-center font-display text-[22px] font-semibold text-ink">
+      <h2 className="mb-3 text-center text-[20px] font-semibold tracking-tight text-ink">
         Things to confirm & notes
       </h2>
       <div className="space-y-2.5">
         {trip.todos.map((todo, i) => (
           <div
             key={i}
-            className="rounded-2xl border border-sand-200 bg-white p-3.5 text-center shadow-card"
+            className="rounded-xl border border-sand-200/70 bg-white p-4 text-center shadow-card"
           >
             <span
-              className={`mb-1.5 inline-block rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${tagCls[todo.tag]}`}
+              className={`mb-1.5 inline-block rounded-md px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.1em] ${tagCls[todo.tag]}`}
             >
               {todo.tag}
             </span>

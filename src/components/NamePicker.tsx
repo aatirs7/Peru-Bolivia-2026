@@ -9,14 +9,14 @@ export default function NamePicker({
 }) {
   return (
     <div>
-      <p className="text-center text-[13px] font-medium text-ink-soft">Who's this?</p>
+      <p className="text-center text-[12.5px] font-medium text-ink-soft">Who's this?</p>
       <div className="mt-2 flex flex-wrap justify-center gap-2">
         {trip.travelers.map((t) => (
           <button
             key={t}
             type="button"
             onClick={() => onPick(t)}
-            className="min-h-[44px] rounded-full border border-clay-200 bg-white px-4 py-2 text-[14px] font-semibold text-clay-700 shadow-sm transition-colors active:bg-clay-500 active:text-white"
+            className="min-h-[40px] rounded-lg border border-sand-200 bg-white px-4 py-1.5 text-[13.5px] font-medium text-ink-soft shadow-card transition-colors active:border-clay-500 active:text-clay-600"
           >
             {t}
           </button>

@@ -10,6 +10,7 @@ import {
 } from "@/data/contacts";
 import { trip } from "@/data/trip";
 import { todayIndex } from "@/lib/useToday";
+import { Star } from "lucide-react";
 import MapLink from "./MapLink";
 
 /** Most recent stay on or before today · the "if separated" meeting point. */
@@ -26,11 +27,13 @@ function currentStay(): string | null {
 
 function ContactRow({ contact }: { contact: Contact }) {
   return (
-    <div className="rounded-2xl border border-sand-200 bg-white p-4 text-center shadow-card">
+    <div className="rounded-xl border border-sand-200/70 bg-white p-4 text-center shadow-card">
       <div className="flex flex-col items-center gap-1.5">
         <div>
           <p className="text-[15px] font-bold leading-snug text-ink">
-            {contact.pinned && <span aria-hidden>⭐ </span>}
+            {contact.pinned && (
+              <Star size={13} strokeWidth={1.75} className="mr-1 inline-block align-[-1px] text-gold-400" aria-hidden />
+            )}
             {contact.name}
           </p>
           {contact.role && (
@@ -58,17 +61,17 @@ function ContactRow({ contact }: { contact: Contact }) {
           {contact.phone && (
             <a
               href={`tel:${contact.phone}`}
-              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full bg-andes-600 px-4 py-2 text-[14px] font-bold text-sand-50 active:bg-andes-800"
+              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg bg-andes-600 px-4 py-2 text-[13.5px] font-semibold text-sand-50 active:bg-andes-800"
             >
-              📞 {contact.phoneLabel ?? contact.phone}
+              Call {contact.phoneLabel ?? contact.phone}
             </a>
           )}
           {contact.email && (
             <a
               href={`mailto:${contact.email}`}
-              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-andes-400 bg-white px-4 py-2 text-[13px] font-semibold text-andes-600 active:bg-andes-100"
+              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-sand-200 bg-white px-4 py-2 text-[13px] font-medium text-andes-600 active:bg-andes-100"
             >
-              ✉️ Email
+              Email
             </a>
           )}
           {contact.place && <MapLink place={contact.place} />}
@@ -102,12 +105,12 @@ export default function ContactsPanel() {
 
   return (
     <section aria-label="Emergency and contacts">
-      <h2 className="text-center font-display text-[24px] font-semibold text-ink">
+      <h2 className="text-center text-[20px] font-semibold tracking-tight text-ink">
         Emergency & contacts
       </h2>
 
       {meetAt && (
-        <p className="mt-2 rounded-2xl bg-andes-100 px-4 py-3 text-center text-[14px] font-semibold leading-snug text-andes-800">
+        <p className="mt-2 rounded-xl border border-andes-400/30 bg-andes-100/50 px-4 py-3 text-center text-[13.5px] font-medium leading-snug text-andes-800">
           If separated: meet at {meetAt}.
         </p>
       )}
@@ -117,9 +120,9 @@ export default function ContactsPanel() {
           <a
             key={`${e.country}-${e.number}`}
             href={`tel:${e.number}`}
-            className="flex min-h-[72px] flex-col items-center justify-center rounded-2xl bg-alert-600 px-3 py-3 text-center text-sand-50 shadow-card active:opacity-90"
+            className="flex min-h-[68px] flex-col items-center justify-center rounded-xl bg-alert-600 px-3 py-3 text-center text-white shadow-card active:opacity-90"
           >
-            <span className="text-[22px] font-black leading-none">{e.number}</span>
+            <span className="text-[20px] font-bold leading-none">{e.number}</span>
             <span className="mt-1 text-[11.5px] font-bold uppercase tracking-wide opacity-90">
               {e.country} · {e.service}
             </span>

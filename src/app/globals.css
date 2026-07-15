@@ -11,22 +11,7 @@ html {
 }
 
 body {
-  @apply bg-sand-100 font-body text-ink antialiased;
-  /* faint woven-textile texture */
-  background-image: repeating-linear-gradient(
-      45deg,
-      rgba(184, 84, 47, 0.025) 0px,
-      rgba(184, 84, 47, 0.025) 1px,
-      transparent 1px,
-      transparent 12px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      rgba(62, 92, 75, 0.02) 0px,
-      rgba(62, 92, 75, 0.02) 1px,
-      transparent 1px,
-      transparent 12px
-    );
+  @apply bg-bone font-sans text-ink antialiased;
   /* keep content clear of the iPhone notch / home bar when installed */
   padding: env(safe-area-inset-top) env(safe-area-inset-right)
     env(safe-area-inset-bottom) env(safe-area-inset-left);

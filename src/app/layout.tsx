@@ -1,15 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Karla } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-// next/font self-hosts these at build time · they're precached with the app
-// shell and render fully offline.
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-display",
-  axes: ["SOFT", "WONK", "opsz"],
-});
-const karla = Karla({ subsets: ["latin"], variable: "--font-body" });
+// next/font self-hosts at build time; the font is precached with the app
+// shell and renders fully offline.
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "Peru & Bolivia 2026",
@@ -27,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#B8542F",
+  themeColor: "#A9532D",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -39,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${karla.variable}`}>
+    <html lang="en" className={inter.variable}>
       <body>{children}</body>
     </html>
   );

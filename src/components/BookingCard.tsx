@@ -1,68 +1,83 @@
+import {
+  BedDouble,
+  Bus,
+  Mountain,
+  Plane,
+  TrainFront,
+  TriangleAlert,
+  type LucideIcon,
+} from "lucide-react";
 import type { BookingCard as Card, CardKind } from "@/types";
 import type { View } from "@/lib/useView";
 import MapLink from "./MapLink";
 import StatusPill from "./StatusPill";
 
-const kindIcon: Record<CardKind, string> = {
-  flight: "✈️",
-  train: "🚆",
-  stay: "🏠",
-  tour: "🥾",
-  transport: "🚐",
-  gap: "⚠️",
+const kindIcon: Record<CardKind, LucideIcon> = {
+  flight: Plane,
+  train: TrainFront,
+  stay: BedDouble,
+  tour: Mountain,
+  transport: Bus,
+  gap: TriangleAlert,
 };
 
 export default function BookingCard({ card, view }: { card: Card; view: View }) {
+  const Icon = kindIcon[card.kind];
   const isGap = card.status === "gap";
   return (
     <div
-      className={`rounded-2xl border bg-white p-4 text-center shadow-card ${
-        isGap ? "border-alert-600/30 bg-alert-100/40" : "border-sand-200"
+      className={`rounded-xl bg-white p-5 text-center shadow-card ${
+        isGap ? "border border-alert-600/25" : "border border-sand-200/70"
       }`}
     >
-      <div className="flex justify-center">
+      <div className="flex flex-col items-center gap-2">
+        <Icon
+          size={18}
+          strokeWidth={1.75}
+          className={isGap ? "text-alert-600" : "text-clay-500"}
+          aria-hidden
+        />
+        <p className="text-[15px] font-semibold leading-snug tracking-tight text-ink">
+          {card.title}
+        </p>
         <StatusPill status={card.status} />
       </div>
-      <p className="mt-2 font-display text-[15px] font-semibold leading-snug text-ink">
-        <span aria-hidden className="mr-1.5">{kindIcon[card.kind]}</span>
-        {card.title}
-      </p>
 
-      <ul className="mt-2 space-y-1">
+      <ul className="mt-2.5 space-y-1">
         {card.lines.map((line, i) => (
-          <li key={i} className="text-[13.5px] leading-snug text-ink-soft">
+          <li key={i} className="text-[13px] leading-snug text-ink-soft">
             {line}
           </li>
         ))}
       </ul>
 
-      {card.place && (
-        <div className="mt-2.5">
+            {card.place && (
+        <div className="mt-3">
           <MapLink place={card.place} subtle />
         </div>
       )}
 
       {view === "lead" && (card.ref || card.pin || card.bookedVia || card.leadNote) && (
-        <div className="mt-3 rounded-xl border border-dashed border-clay-300/60 bg-clay-50 px-3 py-2.5">
-          <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-clay-600">
+        <div className="mt-4 border-t border-sand-200/80 pt-3">
+          <p className="mb-1 text-[9.5px] font-semibold uppercase tracking-[0.14em] text-clay-500">
             Trip lead
           </p>
-          <dl className="space-y-0.5 text-[13px] leading-snug text-ink-soft">
+          <dl className="space-y-0.5 text-[12.5px] leading-snug text-ink-soft">
             {card.ref && (
               <div>
-                <dt className="inline font-semibold text-ink">Ref: </dt>
+                <dt className="inline font-medium text-ink">Ref: </dt>
                 <dd className="inline font-mono tracking-tight">{card.ref}</dd>
               </div>
             )}
             {card.pin && (
               <div>
-                <dt className="inline font-semibold text-ink">PIN: </dt>
+                <dt className="inline font-medium text-ink">PIN: </dt>
                 <dd className="inline font-mono tracking-tight">{card.pin}</dd>
               </div>
             )}
             {card.bookedVia && (
               <div>
-                <dt className="inline font-semibold text-ink">Booked via: </dt>
+                <dt className="inline font-medium text-ink">Booked via: </dt>
                 <dd className="inline">{card.bookedVia}</dd>
               </div>
             )}
