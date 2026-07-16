@@ -1,14 +1,22 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, Moon, Sun } from "lucide-react";
+import { Bell, ChevronLeft, Moon, Sun } from "lucide-react";
+import AlertsPanel from "@/components/AlertsPanel";
+import BookingDetailPanel from "@/components/BookingDetailPanel";
 import ContactsPanel from "@/components/ContactsPanel";
+import { DestinationPanel, DestinationsPanel } from "@/components/ExplorePanels";
+import IssuesPanel from "@/components/IssuesPanel";
 import DayView from "@/components/DayView";
 import { SummaryPanel, TodoPanel } from "@/components/LeadPanels";
 import Overview, { type Screen } from "@/components/Overview";
 import PdfPanel from "@/components/PdfPanel";
 import PlacesPanel from "@/components/PlacesPanel";
+import { bookingDetails } from "@/data/bookings";
+import { DESTINATIONS } from "@/data/destinations";
 import { trip } from "@/data/trip";
+import { destinationForDay } from "@/lib/explore";
+import { useAlerts } from "@/lib/useAlerts";
 import { useTheme } from "@/lib/useTheme";
 import { todayIndex } from "@/lib/useToday";
 import { useView, type View } from "@/lib/useView";
@@ -21,6 +29,9 @@ export default function Page() {
   const [dayIdx, setDayIdx] = useState<number | null>(null);
   const [todayIdx, setTodayIdx] = useState(0);
   const railRef = useRef<HTMLDivElement>(null);
+  const { groups, badge, isDone, toggleDone } = useAlerts(view);
+  const [destId, setDestId] = useState<string | null>(null);
+  const [bookingId, setBookingId] = useState<string | null>(null);
 
   useEffect(() => {
     const t = todayIndex();
@@ -44,7 +55,11 @@ export default function Page() {
   const switchView = (v: View) => {
     setView(v);
     // lead-only screens close when leaving Trip Lead
-    if (v === "family" && (screen === "summary" || screen === "todo")) setScreen("home");
+    if (
+      v === "family" &&
+      (screen === "summary" || screen === "todo" || screen === "issues" || screen === "booking")
+    )
+      setScreen("home");
   };
 
   const openTodaysPlan = () => {
@@ -60,6 +75,23 @@ export default function Page() {
     setScreen("plan");
   };
 
+  const openExplore = (id: string) => {
+    setDestId(id);
+    setScreen("explore");
+  };
+
+  const openBooking = (id: string) => {
+    setBookingId(id);
+    setScreen("booking");
+  };
+
+  // back steps out one level for nested screens, else home
+  const goBack = () => {
+    if (screen === "explore") setScreen("destinations");
+    else if (screen === "booking") setScreen("summary");
+    else setScreen("home");
+  };
+
   const idx = dayIdx ?? 0;
   const day = trip.days[idx];
   const isHome = screen === "home";
@@ -67,20 +99,20 @@ export default function Page() {
   return (
     // home locks to the viewport (no page scroll); other screens scroll normally
     <div
-      className={`mx-auto max-w-lg px-5 pl-[max(1.25rem,env(safe-area-inset-left))] pr-[max(1.25rem,env(safe-area-inset-right))] pt-[env(safe-area-inset-top)] sm:px-6 ${
+      className={`mx-auto max-w-lg pl-[max(1.25rem,env(safe-area-inset-left))] pr-[max(1.25rem,env(safe-area-inset-right))] pt-[env(safe-area-inset-top)] ${
         isHome
-          ? "flex h-[100svh] flex-col overflow-hidden overscroll-none pb-[env(safe-area-inset-bottom)]"
+          ? "fixed inset-0 flex flex-col overflow-hidden overscroll-none pb-[env(safe-area-inset-bottom)]"
           : "min-h-screen pb-[calc(env(safe-area-inset-bottom)+3.5rem)]"
       }`}
     >
       {/* header */}
-      <header className="sticky top-0 z-10 -mx-5 shrink-0 border-b border-sand-200/70 bg-bone/90 px-5 py-3 backdrop-blur-md sm:-mx-6 sm:px-6">
-        <div className="grid grid-cols-[64px_1fr_auto] items-center gap-2">
+      <header className="sticky top-0 z-10 -mx-5 shrink-0 border-b border-sand-200/70 bg-bone px-5 py-3">
+        <div className="grid grid-cols-[36px_1fr_auto] items-center gap-2">
           <div>
             {screen !== "home" && (
               <button
                 type="button"
-                onClick={() => setScreen("home")}
+                onClick={goBack}
                 aria-label="Back to overview"
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-sand-200 bg-card text-ink-soft shadow-card active:bg-sand-100"
               >
@@ -91,7 +123,24 @@ export default function Page() {
           <p className="text-center text-[13px] font-semibold tracking-tight text-ink">
             Peru & Bolivia <span className="text-clay-500">2026</span>
           </p>
-          <div className="flex items-center gap-2 justify-self-end">
+          <div className="flex items-center gap-1.5 justify-self-end">
+          <button
+            type="button"
+            aria-label="Alerts"
+            onClick={() => setScreen(screen === "alerts" ? "home" : "alerts")}
+            className={`relative flex h-8 w-8 items-center justify-center rounded-lg border shadow-card ${
+              screen === "alerts"
+                ? "border-clay-600 bg-clay-600 text-white"
+                : "border-sand-200 bg-card text-ink-soft active:bg-sand-100"
+            }`}
+          >
+            <Bell size={15} strokeWidth={1.75} aria-hidden />
+            {badge > 0 && (
+              <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-alert-600 px-1 text-[9px] font-bold leading-none text-white">
+                {badge}
+              </span>
+            )}
+          </button>
           <button
             type="button"
             onClick={toggleTheme}
@@ -132,9 +181,29 @@ export default function Page() {
         )}
 
         {screen === "contacts" && <ContactsPanel />}
+        {screen === "alerts" && (
+          <AlertsPanel
+            view={view}
+            groups={groups}
+            isDone={isDone}
+            toggleDone={toggleDone}
+            onOpenDay={openDay}
+          />
+        )}
+        {screen === "issues" && view === "lead" && <IssuesPanel onOpenDay={openDay} />}
         {screen === "places" && <PlacesPanel />}
         {screen === "pdf" && <PdfPanel />}
-        {screen === "summary" && view === "lead" && <SummaryPanel />}
+        {screen === "summary" && view === "lead" && <SummaryPanel onOpenBooking={openBooking} />}
+        {screen === "destinations" && <DestinationsPanel onOpen={openExplore} />}
+        {screen === "explore" && destId && (
+          <DestinationPanel dest={DESTINATIONS.find((d) => d.id === destId) ?? DESTINATIONS[0]} />
+        )}
+        {screen === "booking" && view === "lead" && bookingId && (
+          <BookingDetailPanel
+            booking={bookingDetails.find((b) => b.id === bookingId) ?? bookingDetails[0]}
+            onOpenDay={openDay}
+          />
+        )}
         {screen === "todo" && view === "lead" && <TodoPanel />}
 
         {screen === "plan" && (
@@ -207,7 +276,15 @@ export default function Page() {
               </button>
             </div>
 
-            <DayView day={day} view={view} />
+            <DayView
+              day={day}
+              view={view}
+              exploreName={destinationForDay(idx)?.name}
+              onExplore={() => {
+                const d = destinationForDay(idx);
+                if (d) openExplore(d.id);
+              }}
+            />
           </>
         )}
       </main>

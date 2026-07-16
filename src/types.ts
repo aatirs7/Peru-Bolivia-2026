@@ -115,3 +115,35 @@ export interface WeatherSnapshot {
   /** ISO timestamp of the successful fetch. */
   fetchedAt: string;
 }
+
+export type SuggCategory =
+  | "see"
+  | "eat"
+  | "walk"
+  | "market"
+  | "viewpoint"
+  | "daytrip"
+  | "active"
+  | "relax";
+
+export interface Suggestion {
+  name: string;
+  /** One sentence. */
+  blurb: string;
+  category: SuggCategory;
+  /** Already on the itinerary · shown first as a highlight. */
+  onItinerary?: boolean;
+  tip?: string;
+}
+
+export interface Destination {
+  id: string;
+  name: string;
+  /** 1-based itinerary day numbers that open this page. */
+  dayNumbers: number[];
+  intro: string;
+  altitudeNote?: string;
+  halalNote?: string;
+  practical?: string[];
+  suggestions: Suggestion[];
+}

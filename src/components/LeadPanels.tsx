@@ -1,34 +1,40 @@
+import { bookingDetails } from "@/data/bookings";
 import { trip } from "@/data/trip";
 import type { TodoTag } from "@/types";
 import StatusPill from "./StatusPill";
 
-export function SummaryPanel() {
+export function SummaryPanel({ onOpenBooking }: { onOpenBooking: (id: string) => void }) {
   return (
     <section aria-label="Bookings summary">
-      <h2 className="mb-3 text-center text-[20px] font-semibold tracking-tight text-ink">
+      <h2 className="text-center text-[20px] font-semibold tracking-tight text-ink">
         Bookings summary
       </h2>
+      <p className="mb-3 mt-1 text-center text-[11.5px] text-ink-faint">
+        Tap any booking for timings, refs and contacts.
+      </p>
       <div className="space-y-2.5">
-        {trip.summary.map((row, i) => (
-          <div
-            key={i}
-            className="rounded-xl border border-sand-200/70 bg-card p-4 text-center shadow-card"
+        {bookingDetails.map((b) => (
+          <button
+            key={b.id}
+            type="button"
+            onClick={() => onOpenBooking(b.id)}
+            className="w-full rounded-xl border border-sand-200/70 bg-card p-4 text-center shadow-card active:bg-sand-100"
           >
             <div className="flex justify-center">
-              <StatusPill status={row.status} />
+              <StatusPill status={b.status} />
             </div>
             <p className="mt-1.5 text-[14px] font-semibold leading-snug text-ink">
-              {row.segment}
+              {b.title}
             </p>
             <p className="mt-1 text-[12.5px] text-ink-faint">
-              {row.dates} · via {row.via}
+              {b.dates}{b.bookedVia ? ` · ${b.bookedVia.split(" · ")[0].replace("(direct)", "").trim()}` : ""}
             </p>
-            {row.reference && (
+            {b.ref && (
               <p className="mt-1 font-mono text-[12.5px] tracking-tight text-ink-soft">
-                {row.reference}
+                {b.ref}{b.pin ? ` · PIN ${b.pin}` : ""}
               </p>
             )}
-          </div>
+          </button>
         ))}
       </div>
     </section>

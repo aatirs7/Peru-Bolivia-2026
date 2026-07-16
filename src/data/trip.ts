@@ -29,6 +29,7 @@ export const PLACES = {
   rhouse: { type: "hotel", label: "RHOUSE Cusco", query: "RHOUSE Cusco, Cusco, Peru" },
   kawsay: { type: "hotel", label: "Kawsay Apart", query: "Kawsay Apart, La Paz, Bolivia" },
   nidoFlamenco: { type: "tour", label: "Hotel Nido del Flamenco", query: "Hotel Nido del Flamenco, Uyuni, Bolivia" },
+  stannum: { type: "hotel", label: "DREAM By Stannum Hotel", query: "DREAM By Stannum Hotel, La Paz, Bolivia" },
 } satisfies Record<string, Place>;
 
 export const trip: Trip = {
@@ -520,13 +521,15 @@ export const trip: Trip = {
           place: PLACES.uyu,
         },
         {
-          kind: "gap",
-          title: "La Paz lodging (Aug 7 → Aug 9, 2 nights)",
-          status: "gap",
-          lines: [
-            "Not seen booked · nights of Aug 7 & 8 needed back in La Paz",
-            "Before the 3:25 AM Aug 9 flight home (Kawsay Apart only covered Aug 3–5)",
-          ],
+          kind: "stay",
+          title: "DREAM By Stannum Hotel",
+          status: "confirmed",
+          lines: ["La Paz · Aug 7 → Aug 9 (2 nights) · 2 rooms"],
+          ref: "6892807553",
+          pin: "7099",
+          bookedVia: "Booking.com",
+          leadNote: "Total $421.",
+          place: PLACES.stannum,
         },
       ],
       schedule: [
@@ -549,7 +552,7 @@ export const trip: Trip = {
         { time: "Evening", text: "Early dinner, full packing, short rest before the airport run" },
         { time: "~11:30 PM", text: "Wind down · very early departure tonight" },
       ],
-      warn: "Heads-up: the flight home leaves at 3:25 AM on Aug 9, so you'll actually leave your La Paz lodging around 12:30–1:00 AM. Plan lodging + airport transport accordingly.",
+      warn: "Heads-up: the flight home leaves at 3:25 AM on Aug 9, so you'll actually leave DREAM By Stannum around 12:30–1:00 AM. Arrange the airport transport with the hotel.",
     },
     {
       index: 18,
@@ -661,11 +664,11 @@ export const trip: Trip = {
       reference: "confirm room nights",
     },
     {
-      segment: "La Paz lodging · final nights",
+      segment: "DREAM By Stannum Hotel · La Paz final nights",
       dates: "Aug 7–9",
-      via: "-",
-      status: "gap",
-      reference: "not booked",
+      via: "Booking.com",
+      status: "confirmed",
+      reference: "6892807553 · PIN 7099",
     },
     {
       segment: "Machu Picchu · Circuit 2 (2-day)",
@@ -690,10 +693,6 @@ export const trip: Trip = {
     },
   ],
   todos: [
-    {
-      tag: "GAP",
-      text: "La Paz lodging for Aug 7–9. After Uyuni you're back in La Paz for two nights before the 3:25 AM departure · nothing booked for this stretch yet.",
-    },
     {
       tag: "CONFIRM",
       text: "Uyuni lodging (Aug 5–7). Probably Hotel Nido del Flamenco, but confirm the actual room nights.",

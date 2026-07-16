@@ -5,6 +5,7 @@ import {
   ArrowRight,
   BedDouble,
   CalendarDays,
+  CircleAlert,
   Cloud,
   CloudDrizzle,
   CloudFog,
@@ -12,6 +13,7 @@ import {
   CloudRain,
   CloudSnow,
   CloudSun,
+  Compass,
   FileText,
   ListChecks,
   MapPin,
@@ -34,7 +36,19 @@ import type { View } from "@/lib/useView";
 import type { Day } from "@/types";
 import NamePicker from "./NamePicker";
 
-export type Screen = "home" | "plan" | "summary" | "todo" | "contacts" | "places" | "pdf";
+export type Screen =
+  | "home"
+  | "plan"
+  | "summary"
+  | "todo"
+  | "contacts"
+  | "places"
+  | "pdf"
+  | "alerts"
+  | "issues"
+  | "destinations"
+  | "explore"
+  | "booking";
 
 const weatherIcon: Record<string, LucideIcon> = {
   sun: Sun,
@@ -318,11 +332,15 @@ export default function Overview({
         {/* quick links */}
         <div className="flex flex-wrap justify-center gap-2">
           <QuickLink icon={CalendarDays} label="All Days" onClick={() => onNavigate("plan")} />
+          <QuickLink icon={Compass} label="Explore" onClick={() => onNavigate("destinations")} />
           {view === "lead" && (
             <QuickLink icon={NotebookText} label="Bookings" onClick={() => onNavigate("summary")} />
           )}
           {view === "lead" && (
             <QuickLink icon={ListChecks} label="To Confirm" onClick={() => onNavigate("todo")} />
+          )}
+          {view === "lead" && (
+            <QuickLink icon={CircleAlert} label="Issues" onClick={() => onNavigate("issues")} />
           )}
           <QuickLink icon={Phone} label="Emergency" onClick={() => onNavigate("contacts")} />
           <QuickLink icon={MapPin} label="Map Pins" onClick={() => onNavigate("places")} />

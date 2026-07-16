@@ -12,7 +12,17 @@ function prettyDate(iso: string): string {
   });
 }
 
-export default function DayView({ day, view }: { day: Day; view: View }) {
+export default function DayView({
+  day,
+  view,
+  exploreName,
+  onExplore,
+}: {
+  day: Day;
+  view: View;
+  exploreName?: string;
+  onExplore?: () => void;
+}) {
   return (
     <section aria-label={`Day ${day.index}`}>
       <header className="mb-5 text-center">
@@ -22,6 +32,15 @@ export default function DayView({ day, view }: { day: Day; view: View }) {
         <h2 className="mt-1.5 text-[24px] font-semibold leading-tight tracking-tight text-ink">
           {day.title}
         </h2>
+        {exploreName && onExplore && (
+          <button
+            type="button"
+            onClick={onExplore}
+            className="mt-2.5 rounded-lg border border-sand-200 bg-card px-3.5 py-1.5 text-[12.5px] font-semibold text-clay-600 shadow-card active:bg-sand-100"
+          >
+            Explore {exploreName} →
+          </button>
+        )}
       </header>
 
       {day.cards.length > 0 && (

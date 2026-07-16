@@ -87,10 +87,11 @@ export const stayContacts: Contact[] = [
     note: "Likely Hotel Nido del Flamenco · to be confirmed.",
   },
   {
-    name: "La Paz lodging · final nights",
+    name: "DREAM By Stannum Hotel",
     role: "La Paz · Aug 7–9",
     country: "Bolivia",
-    note: "Not booked yet.",
+    place: PLACES.stannum,
+    note: "Phone is on the Booking.com confirmation (conf 6892807553).",
   },
 ];
 
