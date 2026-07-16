@@ -62,11 +62,17 @@ export default function Page() {
 
   const idx = dayIdx ?? 0;
   const day = trip.days[idx];
+  const isHome = screen === "home";
 
   return (
-    <div className="mx-auto min-h-screen max-w-lg px-5 pb-14 sm:px-6">
+    // home locks to the viewport (no page scroll); other screens scroll normally
+    <div
+      className={`mx-auto max-w-lg px-5 sm:px-6 ${
+        isHome ? "flex h-[100svh] flex-col overflow-hidden overscroll-none" : "min-h-screen pb-14"
+      }`}
+    >
       {/* header */}
-      <header className="sticky top-0 z-10 -mx-5 border-b border-sand-200/70 bg-bone/90 px-5 py-3 backdrop-blur-md sm:-mx-6 sm:px-6">
+      <header className="sticky top-0 z-10 -mx-5 shrink-0 border-b border-sand-200/70 bg-bone/90 px-5 py-3 backdrop-blur-md sm:-mx-6 sm:px-6">
         <div className="grid grid-cols-[64px_1fr_auto] items-center gap-2">
           <div>
             {screen !== "home" && (
@@ -118,7 +124,7 @@ export default function Page() {
         </div>
       </header>
 
-      <main className="pt-6">
+      <main className={isHome ? "min-h-0 flex-1 overflow-hidden pb-3 pt-4" : "pt-6"}>
         {screen === "home" && (
           <Overview view={view} onNavigate={setScreen} onTodaysPlan={openTodaysPlan} onOpenDay={openDay} />
         )}

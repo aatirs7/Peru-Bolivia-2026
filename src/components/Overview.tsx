@@ -168,7 +168,7 @@ export default function Overview({
   const today = trip.days[idx];
   const { snapshot, stale, offline } = useWeather(today.coords);
 
-  if (!now) return <div className="min-h-[60vh]" aria-hidden />;
+  if (!now) return <div className="h-full" aria-hidden />;
 
   const phase = tripPhase(now);
   const WIcon = snapshot ? weatherIcon[snapshot.icon] ?? Cloud : null;
@@ -183,8 +183,8 @@ export default function Overview({
   });
 
   return (
-    // fills the viewport under the header exactly · dashboard, no page scroll
-    <div className="flex min-h-[calc(100svh-124px)] flex-col justify-between gap-5 text-center">
+    // fills the locked viewport slot under the header exactly · no page scroll
+    <div className="flex h-full flex-col justify-between gap-4 text-center">
       <div>
         {/* greeting · quiet and small */}
         <button
