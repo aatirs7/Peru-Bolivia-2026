@@ -47,16 +47,21 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  /* reserve the scrollbar gutter so page height crossing the viewport
-     boundary can never oscillate layout width (Chromium freeze) */
-  scrollbar-gutter: stable;
+  overscroll-behavior-y: none;
+  /* hide the page scrollbar entirely (app feel; scrolling still works).
+     Because it occupies zero layout width, page height crossing the
+     viewport boundary can never oscillate layout (Chromium freeze). */
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar {
+  display: none;
 }
 
 body {
   @apply bg-bone font-sans text-ink antialiased;
-  /* keep content clear of the iPhone notch / home bar when installed */
-  padding: env(safe-area-inset-top) env(safe-area-inset-right)
-    env(safe-area-inset-bottom) env(safe-area-inset-left);
+  /* safe-area padding lives INSIDE the app shell (see page.tsx), not on
+     the body: body padding would sit outside the shell's 100svh and make
+     the locked home screen overflow by the inset amount on phones */
 }
 
 /* horizontal day rail: momentum scroll, hidden scrollbar */

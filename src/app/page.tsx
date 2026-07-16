@@ -67,8 +67,10 @@ export default function Page() {
   return (
     // home locks to the viewport (no page scroll); other screens scroll normally
     <div
-      className={`mx-auto max-w-lg px-5 sm:px-6 ${
-        isHome ? "flex h-[100svh] flex-col overflow-hidden overscroll-none" : "min-h-screen pb-14"
+      className={`mx-auto max-w-lg px-5 pl-[max(1.25rem,env(safe-area-inset-left))] pr-[max(1.25rem,env(safe-area-inset-right))] pt-[env(safe-area-inset-top)] sm:px-6 ${
+        isHome
+          ? "flex h-[100svh] flex-col overflow-hidden overscroll-none pb-[env(safe-area-inset-bottom)]"
+          : "min-h-screen pb-[calc(env(safe-area-inset-bottom)+3.5rem)]"
       }`}
     >
       {/* header */}
