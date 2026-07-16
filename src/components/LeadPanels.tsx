@@ -12,7 +12,7 @@ export function SummaryPanel() {
         {trip.summary.map((row, i) => (
           <div
             key={i}
-            className="rounded-xl border border-sand-200/70 bg-white p-4 text-center shadow-card"
+            className="rounded-xl border border-sand-200/70 bg-card p-4 text-center shadow-card"
           >
             <div className="flex justify-center">
               <StatusPill status={row.status} />
@@ -36,12 +36,12 @@ export function SummaryPanel() {
 }
 
 const tagCls: Record<TodoTag, string> = {
-  GAP: "bg-alert-100 text-alert-600",
-  CONFIRM: "bg-clay-100 text-clay-700",
-  PASSPORTS: "bg-andes-100 text-andes-800",
-  CASH: "bg-gold-100 text-gold-600",
-  HEALTH: "bg-andes-100 text-andes-800",
-  WATCH: "bg-gold-100 text-gold-600",
+  GAP: "bg-alert-100 text-alert-600 dark:bg-alert-600/20 dark:text-alert-300",
+  CONFIRM: "bg-clay-100 text-clay-700 dark:text-clay-300",
+  PASSPORTS: "bg-andes-100 text-andes-800 dark:bg-andes-800/40 dark:text-andes-100",
+  CASH: "bg-gold-100 text-gold-600 dark:bg-gold-400/15 dark:text-gold-400",
+  HEALTH: "bg-andes-100 text-andes-800 dark:bg-andes-800/40 dark:text-andes-100",
+  WATCH: "bg-gold-100 text-gold-600 dark:bg-gold-400/15 dark:text-gold-400",
   DOCS: "bg-sand-200 text-ink-soft",
 };
 
@@ -55,7 +55,7 @@ export function TodoPanel() {
         {trip.todos.map((todo, i) => (
           <div
             key={i}
-            className="rounded-xl border border-sand-200/70 bg-white p-4 text-center shadow-card"
+            className="rounded-xl border border-sand-200/70 bg-card p-4 text-center shadow-card"
           >
             <span
               className={`mb-1.5 inline-block rounded-md px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.1em] ${tagCls[todo.tag]}`}

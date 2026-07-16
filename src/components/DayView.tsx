@@ -33,8 +33,8 @@ export default function DayView({ day, view }: { day: Day; view: View }) {
       )}
 
       {day.warn && (
-        <div className="mt-3 flex items-start justify-center gap-2 rounded-xl border border-gold-400/30 bg-gold-100/40 px-4 py-3 text-center text-[13px] leading-snug text-ink-soft">
-          <TriangleAlert size={15} strokeWidth={1.75} className="mt-0.5 shrink-0 text-gold-600" aria-hidden />
+        <div className="mt-3 flex items-start justify-center gap-2 rounded-xl border border-gold-400/30 bg-gold-100/40 px-4 py-3 dark:border-gold-400/20 dark:bg-gold-400/10 text-center text-[13px] leading-snug text-ink-soft">
+          <TriangleAlert size={15} strokeWidth={1.75} className="mt-0.5 shrink-0 text-gold-600 dark:text-gold-400" aria-hidden />
           <span>{day.warn}</span>
         </div>
       )}
@@ -44,7 +44,7 @@ export default function DayView({ day, view }: { day: Day; view: View }) {
           <h3 className="mb-2.5 text-center text-[10.5px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
             The day
           </h3>
-          <div className="rounded-xl border border-sand-200/70 bg-white shadow-card">
+          <div className="rounded-xl border border-sand-200/70 bg-card shadow-card">
             {day.schedule.map((item, i) => (
               <div
                 key={i}

@@ -26,7 +26,7 @@ export default function BookingCard({ card, view }: { card: Card; view: View }) 
   const isGap = card.status === "gap";
   return (
     <div
-      className={`rounded-xl bg-white p-5 text-center shadow-card ${
+      className={`rounded-xl bg-card p-5 text-center shadow-card ${
         isGap ? "border border-alert-600/25" : "border border-sand-200/70"
       }`}
     >

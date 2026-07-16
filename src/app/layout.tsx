@@ -22,7 +22,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#A9532D",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#A9532D" },
+    { media: "(prefers-color-scheme: dark)", color: "#171310" },
+  ],
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -34,8 +37,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body>{children}</body>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <body>
+        <script
+          // apply the saved/system theme before paint so there is no flash
+          dangerouslySetInnerHTML={{
+            __html:
+              'try{var t=localStorage.getItem("trip.theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark")}catch(e){}',
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

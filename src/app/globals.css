@@ -2,12 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+/* palette tokens as RGB triplets (used via rgb(var(..) / alpha) in tailwind) */
 :root {
   color-scheme: light;
+  --c-bg: 250 248 244;
+  --c-card: 255 255 255;
+  --c-panel: 243 239 231;
+  --c-line: 231 223 210;
+  --c-line-2: 213 201 182;
+  --c-ink: 43 35 32;
+  --c-ink-soft: 93 81 72;
+  --c-ink-faint: 149 136 123;
+  --c-clay-50: 248 239 233;
+  --c-clay-100: 240 221 209;
+  --c-clay-200: 223 184 159;
+  --c-clay-300: 204 139 99;
+  --c-clay-400: 188 106 61;
+  --c-clay-500: 169 83 45;
+  --c-clay-600: 143 68 38;
+  --c-clay-700: 113 53 30;
+  --c-clay-800: 82 39 22;
+}
+
+.dark {
+  color-scheme: dark;
+  --c-bg: 23 19 16;
+  --c-card: 33 27 23;
+  --c-panel: 43 36 30;
+  --c-line: 56 47 39;
+  --c-line-2: 70 59 49;
+  --c-ink: 240 234 226;
+  --c-ink-soft: 197 185 173;
+  --c-ink-faint: 143 131 120;
+  --c-clay-50: 45 34 27;
+  --c-clay-100: 58 43 34;
+  --c-clay-200: 96 66 47;
+  --c-clay-300: 178 112 72;
+  --c-clay-400: 208 138 92;
+  --c-clay-500: 206 135 87;
+  --c-clay-600: 166 90 50;
+  --c-clay-700: 143 68 38;
+  --c-clay-800: 113 53 30;
 }
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* reserve the scrollbar gutter so page height crossing the viewport
+     boundary can never oscillate layout width (Chromium freeze) */
+  scrollbar-gutter: stable;
 }
 
 body {

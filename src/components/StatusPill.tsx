@@ -1,10 +1,10 @@
 import type { Status } from "@/types";
 
 const styles: Record<Status, { label: string; cls: string }> = {
-  confirmed: { label: "Confirmed", cls: "border-andes-400/40 text-andes-600" },
-  booked: { label: "Booked", cls: "border-gold-400/40 text-gold-600" },
+  confirmed: { label: "Confirmed", cls: "border-andes-400/40 text-andes-600 dark:text-andes-400" },
+  booked: { label: "Booked", cls: "border-gold-400/40 text-gold-600 dark:text-gold-400" },
   to_confirm: { label: "To confirm", cls: "border-clay-300/60 text-clay-600" },
-  gap: { label: "Gap", cls: "border-alert-600/40 text-alert-600" },
+  gap: { label: "Gap", cls: "border-alert-600/40 text-alert-600 dark:border-alert-300/40 dark:text-alert-300" },
 };
 
 export default function StatusPill({ status }: { status: Status }) {

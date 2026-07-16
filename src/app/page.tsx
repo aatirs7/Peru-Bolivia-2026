@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Moon, Sun } from "lucide-react";
 import ContactsPanel from "@/components/ContactsPanel";
 import DayView from "@/components/DayView";
 import { SummaryPanel, TodoPanel } from "@/components/LeadPanels";
@@ -9,11 +9,13 @@ import Overview, { type Screen } from "@/components/Overview";
 import PdfPanel from "@/components/PdfPanel";
 import PlacesPanel from "@/components/PlacesPanel";
 import { trip } from "@/data/trip";
+import { useTheme } from "@/lib/useTheme";
 import { todayIndex } from "@/lib/useToday";
 import { useView, type View } from "@/lib/useView";
 
 export default function Page() {
   const [view, setView] = useView();
+  const [theme, toggleTheme] = useTheme();
   const [screen, setScreen] = useState<Screen>("home");
   // null until mount · today is resolved client-side to avoid hydration mismatch
   const [dayIdx, setDayIdx] = useState<number | null>(null);
@@ -52,6 +54,12 @@ export default function Page() {
     setScreen("plan");
   };
 
+  const openDay = (i: number) => {
+    setTodayIdx(todayIndex());
+    setDayIdx(i);
+    setScreen("plan");
+  };
+
   const idx = dayIdx ?? 0;
   const day = trip.days[idx];
 
@@ -66,7 +74,7 @@ export default function Page() {
                 type="button"
                 onClick={() => setScreen("home")}
                 aria-label="Back to overview"
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-sand-200 bg-white text-ink-soft shadow-card active:bg-sand-100"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-sand-200 bg-card text-ink-soft shadow-card active:bg-sand-100"
               >
                 <ChevronLeft size={18} strokeWidth={1.75} aria-hidden />
               </button>
@@ -75,10 +83,23 @@ export default function Page() {
           <p className="text-center text-[13px] font-semibold tracking-tight text-ink">
             Peru & Bolivia <span className="text-clay-500">2026</span>
           </p>
+          <div className="flex items-center gap-2 justify-self-end">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label="Toggle dark mode"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-sand-200 bg-card text-ink-soft shadow-card active:bg-sand-100"
+          >
+            {theme === "dark" ? (
+              <Sun size={15} strokeWidth={1.75} aria-hidden />
+            ) : (
+              <Moon size={15} strokeWidth={1.75} aria-hidden />
+            )}
+          </button>
           <div
             role="group"
             aria-label="View"
-            className="flex justify-self-end rounded-lg border border-sand-200 bg-white p-0.5 shadow-card"
+            className="flex rounded-lg border border-sand-200 bg-card p-0.5 shadow-card"
           >
             {(["family", "lead"] as const).map((v) => (
               <button
@@ -93,12 +114,13 @@ export default function Page() {
               </button>
             ))}
           </div>
+          </div>
         </div>
       </header>
 
       <main className="pt-6">
         {screen === "home" && (
-          <Overview view={view} onNavigate={setScreen} onTodaysPlan={openTodaysPlan} />
+          <Overview view={view} onNavigate={setScreen} onTodaysPlan={openTodaysPlan} onOpenDay={openDay} />
         )}
 
         {screen === "contacts" && <ContactsPanel />}
@@ -146,7 +168,7 @@ export default function Page() {
                     className={`relative shrink-0 rounded-lg border px-2.5 py-1.5 text-center transition-colors ${
                       i === idx
                         ? "border-clay-600 bg-clay-600 text-white"
-                        : "border-sand-200 bg-white text-ink-soft"
+                        : "border-sand-200 bg-card text-ink-soft"
                     }`}
                   >
                     <span className="block text-[9.5px] font-semibold uppercase tracking-[0.06em] opacity-70">
@@ -159,7 +181,7 @@ export default function Page() {
                       <span
                         aria-label="today"
                         className={`absolute right-1.5 top-1.5 h-1 w-1 rounded-full ${
-                          i === idx ? "bg-white" : "bg-clay-500"
+                          i === idx ? "bg-card" : "bg-clay-500"
                         }`}
                       />
                     )}

@@ -23,7 +23,7 @@ export default function MapLink({
       className={
         subtle
           ? "inline-block text-[12px] font-medium text-clay-500 underline decoration-clay-200 underline-offset-2 active:text-clay-700"
-          : "inline-block min-h-[40px] rounded-lg border border-sand-200 bg-white px-4 py-2 text-[13px] font-medium text-clay-600 active:bg-sand-100"
+          : "inline-block min-h-[40px] rounded-lg border border-sand-200 bg-card px-4 py-2 text-[13px] font-medium text-clay-600 active:bg-sand-100"
       }
     >
       {subtle ? "Open in Maps" : "Get Directions"}

@@ -27,7 +27,7 @@ function currentStay(): string | null {
 
 function ContactRow({ contact }: { contact: Contact }) {
   return (
-    <div className="rounded-xl border border-sand-200/70 bg-white p-4 text-center shadow-card">
+    <div className="rounded-xl border border-sand-200/70 bg-card p-4 text-center shadow-card">
       <div className="flex flex-col items-center gap-1.5">
         <div>
           <p className="text-[15px] font-bold leading-snug text-ink">
@@ -69,7 +69,7 @@ function ContactRow({ contact }: { contact: Contact }) {
           {contact.email && (
             <a
               href={`mailto:${contact.email}`}
-              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-sand-200 bg-white px-4 py-2 text-[13px] font-medium text-andes-600 active:bg-andes-100"
+              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-sand-200 bg-card px-4 py-2 text-[13px] font-medium text-andes-600 active:bg-andes-100"
             >
               Email
             </a>
@@ -110,7 +110,7 @@ export default function ContactsPanel() {
       </h2>
 
       {meetAt && (
-        <p className="mt-2 rounded-xl border border-andes-400/30 bg-andes-100/50 px-4 py-3 text-center text-[13.5px] font-medium leading-snug text-andes-800">
+        <p className="mt-2 rounded-xl border border-andes-400/30 bg-andes-100/50 px-4 py-3 text-center text-[13.5px] font-medium leading-snug text-andes-800 dark:bg-andes-800/30 dark:text-andes-100">
           If separated: meet at {meetAt}.
         </p>
       )}

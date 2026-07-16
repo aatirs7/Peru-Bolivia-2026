@@ -44,7 +44,7 @@ export default function PlacesPanel() {
           return (
             <div
               key={p.label}
-              className="flex flex-col items-center gap-1.5 rounded-xl border border-sand-200/70 bg-white px-4 py-4 shadow-card"
+              className="flex flex-col items-center gap-1.5 rounded-xl border border-sand-200/70 bg-card px-4 py-4 shadow-card"
             >
               <Icon size={17} strokeWidth={1.75} className="text-clay-500" aria-hidden />
               <p className="text-[14px] font-semibold leading-snug text-ink">{p.label}</p>

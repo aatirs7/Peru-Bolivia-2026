@@ -1,33 +1,39 @@
 import type { Config } from "tailwindcss";
 
+// Core surfaces/text/accents are CSS variables (RGB triplets in globals.css)
+// so dark mode flips the whole app; andes/gold/alert accents stay literal and
+// get targeted dark: overrides where used.
+const v = (name: string) => `rgb(var(${name}) / <alpha-value>)`;
+
 const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
-        // quiet bone / terracotta / deep-brown palette
-        bone: "#FAF8F4",
+        bone: v("--c-bg"),
+        card: v("--c-card"),
         sand: {
-          50: "#FAF8F4",
-          100: "#F3EFE7",
-          200: "#E7DFD2",
-          300: "#D5C9B6",
+          50: v("--c-bg"),
+          100: v("--c-panel"),
+          200: v("--c-line"),
+          300: v("--c-line-2"),
         },
         clay: {
-          50: "#F8EFE9",
-          100: "#F0DDD1",
-          200: "#DFB89F",
-          300: "#CC8B63",
-          400: "#BC6A3D",
-          500: "#A9532D",
-          600: "#8F4426",
-          700: "#71351E",
-          800: "#522716",
+          50: v("--c-clay-50"),
+          100: v("--c-clay-100"),
+          200: v("--c-clay-200"),
+          300: v("--c-clay-300"),
+          400: v("--c-clay-400"),
+          500: v("--c-clay-500"),
+          600: v("--c-clay-600"),
+          700: v("--c-clay-700"),
+          800: v("--c-clay-800"),
         },
         ink: {
-          DEFAULT: "#2B2320",
-          soft: "#5D5148",
-          faint: "#95887B",
+          DEFAULT: v("--c-ink"),
+          soft: v("--c-ink-soft"),
+          faint: v("--c-ink-faint"),
         },
         andes: {
           100: "#E2E9E2",
@@ -42,13 +48,12 @@ const config: Config = {
         },
         alert: {
           100: "#F6E2DE",
+          300: "#DA8E7B",
           600: "#A03B2C",
         },
       },
       fontFamily: {
         sans: ["var(--font-sans)", "-apple-system", "system-ui", "sans-serif"],
-        body: ["var(--font-sans)", "-apple-system", "system-ui", "sans-serif"],
-        display: ["var(--font-sans)", "-apple-system", "system-ui", "sans-serif"],
       },
       boxShadow: {
         card: "0 1px 2px rgba(43,35,32,0.04), 0 6px 20px -12px rgba(43,35,32,0.10)",

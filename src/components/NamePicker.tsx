@@ -16,7 +16,7 @@ export default function NamePicker({
             key={t}
             type="button"
             onClick={() => onPick(t)}
-            className="min-h-[40px] rounded-lg border border-sand-200 bg-white px-4 py-1.5 text-[13.5px] font-medium text-ink-soft shadow-card transition-colors active:border-clay-500 active:text-clay-600"
+            className="min-h-[40px] rounded-lg border border-sand-200 bg-card px-4 py-1.5 text-[13.5px] font-medium text-ink-soft shadow-card transition-colors active:border-clay-500 active:text-clay-600"
           >
             {t}
           </button>

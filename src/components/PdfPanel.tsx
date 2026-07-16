@@ -31,7 +31,7 @@ export default function PdfPanel() {
             src={`/itinerary/page-${i + 1}.png`}
             alt={`Itinerary page ${i + 1} of ${PAGES}`}
             loading={i < 2 ? "eager" : "lazy"}
-            className="w-full rounded-xl border border-sand-200/80 bg-white shadow-card"
+            className="w-full rounded-xl border border-sand-200/80 bg-card shadow-card"
           />
         ))}
       </div>
