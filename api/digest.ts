@@ -1,6 +1,39 @@
 import { del, list } from "@vercel/blob";
 import webpush from "web-push";
-import { alertRules } from "../src/data/alerts";
+
+/**
+ * Flattened alert schedule · KEEP IN SYNC with src/data/alerts.ts (the
+ * function bundler cannot import across the api/ boundary). Only id, title,
+ * audience and fireAt are needed for the digests.
+ */
+const alertRules = [
+  { id: "bolivia-entry", title: "Confirm Bolivia entry requirements", audience: "lead", fireAt: "2026-07-09T09:00:00" },
+  { id: "book-missing-stays", title: "Confirm the Uyuni room nights", audience: "lead", fireAt: "2026-07-16T09:00:00" },
+  { id: "cusco-hotel-details", title: "Get Cusco first-leg hotel details", audience: "lead", fireAt: "2026-07-16T09:30:00" },
+  { id: "mp-form", title: "Send the Machu Picchu Center form", audience: "lead", fireAt: "2026-07-16T10:00:00" },
+  { id: "passports-packed", title: "Passports valid and packed", audience: "all", fireAt: "2026-07-22T09:00:00" },
+  { id: "offline-maps", title: "Download offline Google Maps areas", audience: "all", fireAt: "2026-07-22T10:00:00" },
+  { id: "checkin-avianca-out", title: "Check in: Avianca IAD to LIM", audience: "lead", fireAt: "2026-07-22T10:00:00" },
+  { id: "ubers-to-iad", title: "Schedule two Ubers to IAD", audience: "lead", fireAt: "2026-07-22T18:00:00" },
+  { id: "checkin-jetsmart-1", title: "JetSMART check-in opens", audience: "lead", fireAt: "2026-07-23T10:00:00" },
+  { id: "altitude-meds", title: "Altitude medication timing", audience: "all", fireAt: "2026-07-24T09:00:00" },
+  { id: "checkin-jetsmart-2", title: "Check in: JetSMART LIM to CUZ", audience: "lead", fireAt: "2026-07-25T10:00:00" },
+  { id: "cusco-arrival", title: "Cusco tonight: take it easy", audience: "all", fireAt: "2026-07-26T18:00:00" },
+  { id: "ollanta-car", title: "Arrange Cusco to Ollantaytambo car", audience: "lead", fireAt: "2026-07-26T09:00:00" },
+  { id: "cash-rainbow", title: "Have $420 USD cash for tomorrow", audience: "all", fireAt: "2026-07-27T10:00:00" },
+  { id: "rainbow-eve", title: "Rainbow Mountain tomorrow: prep tonight", audience: "all", fireAt: "2026-07-27T19:00:00" },
+  { id: "mp-reconfirm", title: "Reconfirm Machu Picchu coordinator + train", audience: "lead", fireAt: "2026-07-28T09:00:00" },
+  { id: "mp-passports-day1", title: "Bring original passports today", audience: "all", fireAt: "2026-07-30T07:00:00" },
+  { id: "mp-passports-day2", title: "Passports again for Machu Picchu entry", audience: "all", fireAt: "2026-07-31T07:00:00" },
+  { id: "checkin-cuz-lpb", title: "Check in: Cusco to La Paz", audience: "lead", fireAt: "2026-08-02T10:00:00" },
+  { id: "lapaz-altitude", title: "La Paz altitude, round two", audience: "all", fireAt: "2026-08-03T09:00:00" },
+  { id: "cash-bolivianos", title: "Get bolivianos", audience: "all", fireAt: "2026-08-03T16:00:00" },
+  { id: "checkin-ob304", title: "Check in: La Paz to Uyuni (OB304)", audience: "lead", fireAt: "2026-08-04T10:00:00" },
+  { id: "cash-uyuni", title: "Have $450 USD cash for tomorrow", audience: "all", fireAt: "2026-08-05T10:00:00" },
+  { id: "checkin-ob305", title: "Check in: Uyuni to La Paz (OB305) · time changed", audience: "lead", fireAt: "2026-08-06T10:00:00" },
+  { id: "lapaz-taxi", title: "Pre-book the La Paz airport taxi", audience: "lead", fireAt: "2026-08-07T10:00:00" },
+  { id: "checkin-avianca-home", title: "Check in: Avianca LPB to IAD · red-eye", audience: "lead", fireAt: "2026-08-08T10:00:00" },
+];
 
 export const config = { maxDuration: 60 };
 
