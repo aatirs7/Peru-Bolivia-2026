@@ -1,4 +1,4 @@
-import type { Coords, Place, Trip } from "@/types";
+import type { Coords, Place, Trip } from "../types";
 
 // Fixed city coordinates for the offline weather lookup · no geocoding, ever.
 const LIMA: Coords = { lat: -12.119, lng: -77.029, label: "Lima" };

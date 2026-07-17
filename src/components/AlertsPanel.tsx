@@ -3,6 +3,7 @@
 import { CalendarPlus } from "lucide-react";
 import type { AlertRule } from "@/data/alerts";
 import { downloadIcs } from "@/lib/ics";
+import { usePush } from "@/lib/usePush";
 import type { AlertGroups } from "@/lib/useAlerts";
 import type { View } from "@/lib/useView";
 
@@ -153,6 +154,7 @@ export default function AlertsPanel({
   toggleDone: (id: string) => void;
   onOpenDay: (i: number) => void;
 }) {
+  const { state: push, enable, disable, sendTest } = usePush(view);
   const empty =
     groups.today.length + groups.next48.length + groups.upcoming.length + groups.done.length === 0;
 
@@ -173,8 +175,60 @@ export default function AlertsPanel({
         Add trip reminders to calendar
       </button>
       <p className="mt-1.5 text-[10.5px] text-ink-faint">
-        Downloads an .ics file · open it and choose Add to Calendar.
+        Downloads an .ics file · open it and choose Add to Calendar for
+        exact-time alarms, fully offline.
       </p>
+
+      {/* push notifications · the one online-optional module */}
+      <div className="mx-auto mt-4 max-w-md rounded-xl border border-sand-200/70 bg-card p-4 shadow-card">
+        <p className="text-[13.5px] font-semibold text-ink">Push notifications</p>
+        <p className="mx-auto mt-1 max-w-sm text-[11.5px] leading-snug text-ink-faint">
+          A morning and an evening digest of the day's reminders, delivered
+          even when the app is closed. Needs wifi to enable. On iPhone: add
+          the app to your Home Screen first (iOS 16.4+), then enable here.
+        </p>
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+          {push === "unsupported" && (
+            <p className="text-[12px] text-ink-faint">Not supported in this browser.</p>
+          )}
+          {push === "denied" && (
+            <p className="text-[12px] text-ink-faint">
+              Notifications are blocked · allow them in your browser settings, then retry.
+            </p>
+          )}
+          {(push === "off" || push === "busy") && (
+            <button
+              type="button"
+              disabled={push === "busy"}
+              onClick={() => void enable()}
+              className="rounded-lg bg-andes-600 px-4 py-2 text-[13px] font-semibold text-white active:bg-andes-800 disabled:opacity-60"
+            >
+              {push === "busy" ? "Working..." : "Enable on this device"}
+            </button>
+          )}
+          {push === "on" && (
+            <>
+              <span className="rounded-md border border-andes-400/40 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-andes-600 dark:text-andes-400">
+                Enabled
+              </span>
+              <button
+                type="button"
+                onClick={() => void sendTest()}
+                className="rounded-lg border border-sand-200 bg-card px-3.5 py-1.5 text-[12.5px] font-medium text-ink-soft active:bg-sand-100"
+              >
+                Send test
+              </button>
+              <button
+                type="button"
+                onClick={() => void disable()}
+                className="rounded-lg border border-sand-200 bg-card px-3.5 py-1.5 text-[12.5px] font-medium text-ink-faint active:bg-sand-100"
+              >
+                Disable
+              </button>
+            </>
+          )}
+        </div>
+      </div>
 
       {empty && (
         <p className="mt-8 text-[13px] text-ink-faint">No alerts for this view.</p>

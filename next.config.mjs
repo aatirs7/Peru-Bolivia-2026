@@ -6,6 +6,9 @@ const withPWA = withPWAInit({
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
   reloadOnOnline: false,
+  workboxOptions: {
+    importScripts: ["push-sw.js"],
+  },
 });
 
 /** @type {import('next').NextConfig} */
