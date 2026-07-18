@@ -13,7 +13,6 @@ import {
   CloudRain,
   CloudSnow,
   CloudSun,
-  Compass,
   FileText,
   ListChecks,
   MapPin,
@@ -64,17 +63,6 @@ const weatherIcon: Record<string, LucideIcon> = {
   thermometer: Thermometer,
 };
 
-// the trip's legs · tappable jump points into the itinerary
-const LEGS = [
-  { label: "Lima", dates: "Jul 23", dayIdx: 0 },
-  { label: "Cusco", dates: "Jul 26", dayIdx: 3 },
-  { label: "Machu Picchu", dates: "Jul 30", dayIdx: 7 },
-  { label: "Cusco", dates: "Aug 1", dayIdx: 9 },
-  { label: "La Paz", dates: "Aug 3", dayIdx: 11 },
-  { label: "Uyuni", dates: "Aug 5", dayIdx: 13 },
-  { label: "La Paz", dates: "Aug 7", dayIdx: 15 },
-];
-
 const shortDate = (iso: string) => {
   const [y, m, d] = iso.split("-").map(Number);
   return new Date(y, m - 1, d).toLocaleDateString(undefined, { month: "short", day: "numeric" });
@@ -112,15 +100,6 @@ function dayFlag(day: Day): { icon: LucideIcon; text: string } | null {
   const cash = all.match(/\$(\d+)\s?(?:USD\s?)?[^.]*due on site/i);
   if (cash) return { icon: Wallet, text: `Cash due on site today: $${cash[1]}` };
   return null;
-}
-
-/** Current leg for highlighting the route strip. */
-function currentLeg(todayIdx: number): number {
-  let cur = 0;
-  LEGS.forEach((leg, i) => {
-    if (leg.dayIdx <= todayIdx) cur = i;
-  });
-  return cur;
 }
 
 function QuickLink({
@@ -191,7 +170,6 @@ export default function Overview({
   const transit = nextTransit(idx);
   const stay = tonightStay(idx);
   const flag = phase === "during" ? dayFlag(today) : null;
-  const leg = currentLeg(idx);
   const dateLine = now.toLocaleDateString(undefined, {
     weekday: "long",
     month: "long",
@@ -304,37 +282,10 @@ export default function Overview({
         <ArrowRight size={17} strokeWidth={2} aria-hidden />
       </button>
 
-      {/* the route · tappable legs */}
-      <div>
-        <p className="mb-2 text-[9.5px] font-semibold uppercase tracking-[0.18em] text-ink-faint">
-          The route
-        </p>
-        <div className="flex flex-wrap justify-center gap-1.5">
-          {LEGS.map((l, i) => (
-            <button
-              key={`${l.label}-${l.dates}`}
-              type="button"
-              onClick={() => onOpenDay(l.dayIdx)}
-              className={`rounded-lg border px-2.5 py-1.5 transition-colors ${
-                phase === "during" && i === leg
-                  ? "border-clay-600 bg-clay-600 text-white"
-                  : "border-sand-200 bg-card text-ink-soft active:bg-sand-100"
-              }`}
-            >
-              <span className="block text-[11.5px] font-semibold leading-tight">{l.label}</span>
-              <span className={`block text-[9px] font-medium ${phase === "during" && i === leg ? "text-white/75" : "text-ink-faint"}`}>
-                {l.dates}
-              </span>
-            </button>
-          ))}
-        </div>
-      </div>
-
       <div>
         {/* quick links */}
         <div className="flex flex-wrap justify-center gap-2">
           <QuickLink icon={CalendarDays} label="All Days" onClick={() => onNavigate("plan")} />
-          <QuickLink icon={Compass} label="Explore" onClick={() => onNavigate("destinations")} />
           {view === "lead" && (
             <QuickLink icon={NotebookText} label="Bookings" onClick={() => onNavigate("summary")} />
           )}

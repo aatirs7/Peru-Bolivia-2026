@@ -5,6 +5,7 @@ import { Bell, ChevronLeft, Moon, Sun } from "lucide-react";
 import AlertsPanel from "@/components/AlertsPanel";
 import BookingDetailPanel from "@/components/BookingDetailPanel";
 import ContactsPanel from "@/components/ContactsPanel";
+import DayEditor from "@/components/DayEditor";
 import { DestinationPanel, DestinationsPanel } from "@/components/ExplorePanels";
 import IssuesPanel from "@/components/IssuesPanel";
 import DayView from "@/components/DayView";
@@ -18,6 +19,7 @@ import { DESTINATIONS } from "@/data/destinations";
 import { trip } from "@/data/trip";
 import { destinationForDay } from "@/lib/explore";
 import { useAlerts } from "@/lib/useAlerts";
+import { useDayEdits } from "@/lib/useDayEdits";
 import { useTheme } from "@/lib/useTheme";
 import { todayIndex } from "@/lib/useToday";
 import { useView, type View } from "@/lib/useView";
@@ -31,8 +33,10 @@ export default function Page() {
   const [todayIdx, setTodayIdx] = useState(0);
   const railRef = useRef<HTMLDivElement>(null);
   const { groups, badge, isDone, toggleDone } = useAlerts(view);
+  const { overrides, effective, saveDay, resetDay } = useDayEdits();
   const [destId, setDestId] = useState<string | null>(null);
   const [bookingId, setBookingId] = useState<string | null>(null);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     const t = todayIndex();
@@ -67,13 +71,20 @@ export default function Page() {
     const t = todayIndex();
     setTodayIdx(t);
     setDayIdx(t);
+    setEditing(false);
     setScreen("plan");
   };
 
   const openDay = (i: number) => {
     setTodayIdx(todayIndex());
     setDayIdx(i);
+    setEditing(false);
     setScreen("plan");
+  };
+
+  const goToDay = (i: number) => {
+    setEditing(false);
+    setDayIdx(i);
   };
 
   const openExplore = (id: string) => {
@@ -90,11 +101,16 @@ export default function Page() {
   const goBack = () => {
     if (screen === "explore") setScreen("destinations");
     else if (screen === "booking") setScreen("summary");
-    else setScreen("home");
+    else {
+      setEditing(false);
+      setScreen("home");
+    }
   };
 
   const idx = dayIdx ?? 0;
-  const day = trip.days[idx];
+  const day = effective(idx);
+  const ov = overrides[idx];
+  const dayEdited = !!ov && ov.schedule !== undefined;
   const isHome = screen === "home";
 
   return (
@@ -208,7 +224,24 @@ export default function Page() {
         )}
         {screen === "todo" && view === "lead" && <TodoPanel />}
 
-        {screen === "plan" && (
+        {screen === "plan" && editing && view === "lead" && (
+          <DayEditor
+            day={day}
+            dayIdx={idx}
+            hasOverride={dayEdited}
+            onSave={(patch) => {
+              saveDay(idx, patch);
+              setEditing(false);
+            }}
+            onCancel={() => setEditing(false)}
+            onReset={() => {
+              resetDay(idx);
+              setEditing(false);
+            }}
+          />
+        )}
+
+        {screen === "plan" && !(editing && view === "lead") && (
           <>
             {/* day switcher lives here, not on the overview */}
             <div className="mb-1 flex items-center justify-center gap-3">
@@ -220,7 +253,7 @@ export default function Page() {
                 onClick={() => {
                   const t = todayIndex();
                   setTodayIdx(t);
-                  setDayIdx(t);
+                  goToDay(t);
                 }}
                 className="rounded-md px-2 py-1 text-[12px] font-semibold text-clay-600 active:bg-sand-100"
               >
@@ -231,46 +264,57 @@ export default function Page() {
               <button
                 type="button"
                 aria-label="Previous day"
-                onClick={() => setDayIdx(Math.max(0, idx - 1))}
+                onClick={() => goToDay(Math.max(0, idx - 1))}
                 disabled={idx === 0}
                 className="ml-1 shrink-0 px-2 py-2 text-ink-soft disabled:opacity-30"
               >
                 <ChevronLeft size={18} strokeWidth={1.75} aria-hidden />
               </button>
               <div ref={railRef} className="rail flex flex-1 gap-1.5 overflow-x-auto px-1 py-1">
-                {trip.days.map((d, i) => (
-                  <button
-                    key={d.date}
-                    type="button"
-                    data-day={i}
-                    onClick={() => setDayIdx(i)}
-                    className={`relative shrink-0 rounded-lg border px-2.5 py-1.5 text-center transition-colors ${
-                      i === idx
-                        ? "border-clay-600 bg-clay-600 text-white"
-                        : "border-sand-200 bg-card text-ink-soft"
-                    }`}
-                  >
-                    <span className="block text-[9.5px] font-semibold uppercase tracking-[0.06em] opacity-70">
-                      Day {d.index}
-                    </span>
-                    <span className="block whitespace-nowrap text-[11.5px] font-medium">
-                      {d.route}
-                    </span>
-                    {i === todayIdx && (
-                      <span
-                        aria-label="today"
-                        className={`absolute right-1.5 top-1.5 h-1 w-1 rounded-full ${
-                          i === idx ? "bg-card" : "bg-clay-500"
-                        }`}
-                      />
-                    )}
-                  </button>
-                ))}
+                {trip.days.map((d, i) => {
+                  const iEdited = !!overrides[i] && overrides[i].schedule !== undefined;
+                  return (
+                    <button
+                      key={d.date}
+                      type="button"
+                      data-day={i}
+                      onClick={() => goToDay(i)}
+                      className={`relative shrink-0 rounded-lg border px-2.5 py-1.5 text-center transition-colors ${
+                        i === idx
+                          ? "border-clay-600 bg-clay-600 text-white"
+                          : "border-sand-200 bg-card text-ink-soft"
+                      }`}
+                    >
+                      <span className="block text-[9.5px] font-semibold uppercase tracking-[0.06em] opacity-70">
+                        Day {d.index}
+                      </span>
+                      <span className="block whitespace-nowrap text-[11.5px] font-medium">
+                        {effective(i).route}
+                      </span>
+                      {i === todayIdx && (
+                        <span
+                          aria-label="today"
+                          className={`absolute right-1.5 top-1.5 h-1 w-1 rounded-full ${
+                            i === idx ? "bg-card" : "bg-clay-500"
+                          }`}
+                        />
+                      )}
+                      {iEdited && (
+                        <span
+                          aria-label="edited"
+                          className={`absolute left-1.5 top-1.5 h-1 w-1 rounded-full ${
+                            i === idx ? "bg-card" : "bg-gold-400"
+                          }`}
+                        />
+                      )}
+                    </button>
+                  );
+                })}
               </div>
               <button
                 type="button"
                 aria-label="Next day"
-                onClick={() => setDayIdx(Math.min(trip.days.length - 1, idx + 1))}
+                onClick={() => goToDay(Math.min(trip.days.length - 1, idx + 1))}
                 disabled={idx === trip.days.length - 1}
                 className="mr-1 shrink-0 rotate-180 px-2 py-2 text-ink-soft disabled:opacity-30"
               >
@@ -286,6 +330,9 @@ export default function Page() {
                 const d = destinationForDay(idx);
                 if (d) openExplore(d.id);
               }}
+              edited={dayEdited}
+              onEdit={() => setEditing(true)}
+              onReset={() => resetDay(idx)}
             />
           </>
         )}
