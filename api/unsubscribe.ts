@@ -4,6 +4,9 @@ import { subId } from "./subscribe";
 export const config = { maxDuration: 10 };
 
 export default async function handler(req: any, res: any) {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return res.status(503).json({ error: "storage not connected · link the peru-push-subs Blob store to the project and redeploy" });
+  }
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
   const { endpoint } = req.body ?? {};
   if (typeof endpoint !== "string" || !endpoint) {

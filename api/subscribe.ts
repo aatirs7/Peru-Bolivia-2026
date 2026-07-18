@@ -8,6 +8,9 @@ export function subId(endpoint: string): string {
 }
 
 export default async function handler(req: any, res: any) {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return res.status(503).json({ error: "storage not connected · link the peru-push-subs Blob store to the project and redeploy" });
+  }
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
   const { subscription, audience } = req.body ?? {};
   if (!subscription?.endpoint || !subscription?.keys?.p256dh) {

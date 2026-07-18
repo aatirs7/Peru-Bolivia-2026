@@ -12,6 +12,9 @@ const cleanId = (id: unknown): string | null =>
   typeof id === "string" && /^[a-z0-9-]{8,64}$/.test(id) ? id : null;
 
 export default async function handler(req: any, res: any) {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return res.status(503).json({ error: "storage not connected · link the peru-push-subs Blob store to the project and redeploy" });
+  }
   if (req.method === "GET") {
     const { blobs } = await list({ prefix: "revisions/" });
     const items = await Promise.all(
