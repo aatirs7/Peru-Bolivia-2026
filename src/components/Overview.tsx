@@ -18,6 +18,7 @@ import {
   ListChecks,
   MapPin,
   NotebookText,
+  PencilLine,
   Phone,
   Plane,
   ShieldAlert,
@@ -48,7 +49,8 @@ export type Screen =
   | "issues"
   | "destinations"
   | "explore"
-  | "booking";
+  | "booking"
+  | "revisions";
 
 const weatherIcon: Record<string, LucideIcon> = {
   sun: Sun,
@@ -341,6 +343,9 @@ export default function Overview({
           )}
           {view === "lead" && (
             <QuickLink icon={CircleAlert} label="Issues" onClick={() => onNavigate("issues")} />
+          )}
+          {view === "lead" && (
+            <QuickLink icon={PencilLine} label="Revisions" onClick={() => onNavigate("revisions")} />
           )}
           <QuickLink icon={Phone} label="Emergency" onClick={() => onNavigate("contacts")} />
           <QuickLink icon={MapPin} label="Map Pins" onClick={() => onNavigate("places")} />

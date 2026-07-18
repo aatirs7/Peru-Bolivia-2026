@@ -12,6 +12,7 @@ import { SummaryPanel, TodoPanel } from "@/components/LeadPanels";
 import Overview, { type Screen } from "@/components/Overview";
 import PdfPanel from "@/components/PdfPanel";
 import PlacesPanel from "@/components/PlacesPanel";
+import RevisionsPanel from "@/components/RevisionsPanel";
 import { bookingDetails } from "@/data/bookings";
 import { DESTINATIONS } from "@/data/destinations";
 import { trip } from "@/data/trip";
@@ -57,7 +58,7 @@ export default function Page() {
     // lead-only screens close when leaving Trip Lead
     if (
       v === "family" &&
-      (screen === "summary" || screen === "todo" || screen === "issues" || screen === "booking")
+      (screen === "summary" || screen === "todo" || screen === "issues" || screen === "booking" || screen === "revisions")
     )
       setScreen("home");
   };
@@ -191,6 +192,7 @@ export default function Page() {
           />
         )}
         {screen === "issues" && view === "lead" && <IssuesPanel onOpenDay={openDay} />}
+        {screen === "revisions" && view === "lead" && <RevisionsPanel />}
         {screen === "places" && <PlacesPanel />}
         {screen === "pdf" && <PdfPanel />}
         {screen === "summary" && view === "lead" && <SummaryPanel onOpenBooking={openBooking} />}
