@@ -6,13 +6,7 @@ import type { BookingCard, CardKind, Day, ScheduleItem, Status } from "@/types";
 import type { DayOverride } from "@/lib/useDayEdits";
 import type { View } from "@/lib/useView";
 import { sunTimes } from "@/lib/sun";
-import {
-  composeClock,
-  minuteParts,
-  parseTimeField,
-  partsToMinutes,
-  sortByTime,
-} from "@/lib/timeblocks";
+import { formatMin, parseTimeField, sortByTime } from "@/lib/timeblocks";
 import BookingCardView from "./BookingCard";
 
 const KIND_OPTIONS: { value: CardKind; label: string }[] = [
@@ -34,108 +28,80 @@ const LABEL_PRESETS = ["Morning", "Midday", "Afternoon", "Evening", "Night", "Ea
 const inputCls =
   "w-full rounded-lg border border-sand-200 bg-bone px-3 py-2 text-[14px] text-ink placeholder:text-ink-faint focus:border-clay-400 focus:outline-none";
 const selCls =
-  "rounded-lg border border-sand-200 bg-bone px-2 py-2 text-[14px] text-ink focus:border-clay-400 focus:outline-none";
+  "rounded-lg border border-sand-200 bg-bone px-2.5 py-2 text-[14px] text-ink focus:border-clay-400 focus:outline-none";
 const labelCls = "mb-1 block text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-faint";
+const labelCenter = "mb-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-faint";
 
 function prettyDate(iso: string): string {
   const [y, m, d] = iso.split("-").map(Number);
   return new Date(y, m - 1, d).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" });
 }
 
+/** Clock time options every 15 min, plus any off-grid values already in use. */
+function clockOptions(extra: (number | null)[]): string[] {
+  const set = new Set<number>();
+  for (let m = 0; m < 1440; m += 15) set.add(m);
+  extra.forEach((m) => { if (m != null) set.add(m); });
+  return Array.from(set).sort((a, b) => a - b).map((m) => formatMin(m));
+}
+
 function EditRowButtons({ onUndo, onSave, onDelete }: { onUndo: () => void; onSave: () => void; onDelete?: () => void }) {
   return (
-    <div className="mt-3 flex items-center gap-2">
-      <button type="button" onClick={onUndo} className="flex-1 rounded-lg border border-sand-200 bg-card py-2 text-[13px] font-semibold text-ink-soft active:bg-sand-100">
-        Undo
-      </button>
+    <div className="mt-4 flex items-center gap-2">
+      <button type="button" onClick={onUndo} className="flex-1 rounded-lg border border-sand-200 bg-card py-2 text-[13px] font-semibold text-ink-soft active:bg-sand-100">Undo</button>
       {onDelete && (
-        <button type="button" onClick={onDelete} className="rounded-lg border border-alert-600/40 bg-card px-3.5 py-2 text-[13px] font-semibold text-alert-600 active:bg-sand-100">
-          Delete
-        </button>
+        <button type="button" onClick={onDelete} className="rounded-lg border border-alert-600/40 bg-card px-3.5 py-2 text-[13px] font-semibold text-alert-600 active:bg-sand-100">Delete</button>
       )}
-      <button type="button" onClick={onSave} className="flex-1 rounded-lg bg-clay-600 py-2 text-[13px] font-semibold text-white shadow-lift active:bg-clay-700">
-        Save
-      </button>
+      <button type="button" onClick={onSave} className="flex-1 rounded-lg bg-clay-600 py-2 text-[13px] font-semibold text-white shadow-lift active:bg-clay-700">Save</button>
     </div>
   );
 }
 
-/** Hour : minute : AM/PM dropdowns for a time in minutes-past-midnight. */
-function ClockSelect({ minutes, onChange }: { minutes: number; onChange: (m: number) => void }) {
-  const { h12, min, ap } = minuteParts(minutes);
-  const minOpts = Array.from(new Set([...Array.from({ length: 12 }, (_, i) => i * 5), min])).sort((a, b) => a - b);
-  const set = (h: number, mi: number, a: "AM" | "PM") => onChange(partsToMinutes(h, mi, a));
-  return (
-    <div className="flex items-center gap-1">
-      <select value={h12} onChange={(e) => set(+e.target.value, min, ap)} className={selCls} aria-label="Hour">
-        {Array.from({ length: 12 }, (_, i) => i + 1).map((h) => <option key={h} value={h}>{h}</option>)}
-      </select>
-      <span className="text-ink-faint">:</span>
-      <select value={min} onChange={(e) => set(h12, +e.target.value, ap)} className={selCls} aria-label="Minute">
-        {minOpts.map((m) => <option key={m} value={m}>{String(m).padStart(2, "0")}</option>)}
-      </select>
-      <select value={ap} onChange={(e) => set(h12, min, e.target.value as "AM" | "PM")} className={selCls} aria-label="AM or PM">
-        <option value="AM">AM</option>
-        <option value="PM">PM</option>
-      </select>
-    </div>
-  );
-}
-
-/** Structured time editor · clock dropdowns (with optional end) or a label. */
+/**
+ * Time picker · pure dropdowns, no typing. One select lists every clock time
+ * (15-min steps) plus plain-language labels (Morning, Layover…); a second
+ * optional "to" select adds an end time for a range. Centered.
+ */
 function TimePicker({ value, onChange }: { value: string; onChange: (t: string) => void }) {
   const [p0] = useState(() => parseTimeField(value));
-  const [mode, setMode] = useState<"clock" | "label">(p0.startMin === null && p0.label !== null ? "label" : "clock");
-  const [startMin, setStartMin] = useState(p0.startMin ?? 540);
-  const [hasEnd, setHasEnd] = useState(p0.endMin !== null);
-  const [endMin, setEndMin] = useState(p0.endMin ?? Math.min((p0.startMin ?? 540) + 60, 1439));
-  const [label, setLabel] = useState(p0.label ?? "");
+  const nonPresetLabel = p0.label !== null && !LABEL_PRESETS.includes(p0.label) ? p0.label : null;
+  const [opts] = useState(() => clockOptions([p0.startMin, p0.endMin]));
+  const [start, setStart] = useState(
+    p0.label !== null ? p0.label : p0.startMin !== null ? formatMin(p0.startMin) : "9:00 AM",
+  );
+  const [end, setEnd] = useState(p0.endMin !== null ? formatMin(p0.endMin) : "");
 
-  const emit = (n: Partial<{ mode: "clock" | "label"; startMin: number; hasEnd: boolean; endMin: number; label: string }>) => {
-    const s = { mode, startMin, hasEnd, endMin, label, ...n };
-    onChange(s.mode === "label" ? s.label : composeClock(s.startMin, s.hasEnd ? s.endMin : null));
+  const startIsClock = !LABEL_PRESETS.includes(start) && start !== nonPresetLabel && parseTimeField(start).startMin !== null;
+
+  const changeStart = (s: string) => {
+    setStart(s);
+    if (opts.includes(s)) onChange(end ? `${s} – ${end}` : s);
+    else { setEnd(""); onChange(s); } // a label
   };
+  const changeEnd = (e: string) => { setEnd(e); onChange(e ? `${start} – ${e}` : start); };
 
   return (
-    <div>
-      <div className="inline-flex rounded-lg border border-sand-200 bg-card p-0.5">
-        {(["clock", "label"] as const).map((m) => (
-          <button
-            key={m}
-            type="button"
-            onClick={() => { setMode(m); emit({ mode: m }); }}
-            className={`rounded-md px-3 py-1 text-[12px] font-semibold ${mode === m ? "bg-clay-600 text-white" : "text-ink-faint"}`}
-          >
-            {m === "clock" ? "Clock time" : "Label"}
-          </button>
-        ))}
-      </div>
-
-      {mode === "clock" ? (
-        <div className="mt-2">
-          <label className={labelCls}>Start</label>
-          <ClockSelect minutes={startMin} onChange={(v) => { setStartMin(v); emit({ startMin: v }); }} />
-          <label className="mt-2 flex items-center gap-2 text-[13px] text-ink-soft">
-            <input type="checkbox" checked={hasEnd} onChange={(e) => { setHasEnd(e.target.checked); emit({ hasEnd: e.target.checked }); }} className="h-4 w-4 accent-clay-600" />
-            Add an end time (a range)
-          </label>
-          {hasEnd && (
-            <div className="mt-1.5">
-              <label className={labelCls}>End</label>
-              <ClockSelect minutes={endMin} onChange={(v) => { setEndMin(v); emit({ endMin: v }); }} />
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className="mt-2">
-          <input value={label} onChange={(e) => { setLabel(e.target.value); emit({ label: e.target.value }); }} className={inputCls} placeholder="e.g. Morning, Layover, ~10:30 AM" />
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {LABEL_PRESETS.map((l) => (
-              <button key={l} type="button" onClick={() => { setLabel(l); emit({ label: l }); }} className="rounded-md border border-sand-200 bg-card px-2 py-1 text-[11.5px] font-medium text-ink-soft active:bg-sand-100">
-                {l}
-              </button>
-            ))}
-          </div>
+    <div className="flex flex-col items-center gap-2">
+      <select value={start} onChange={(e) => changeStart(e.target.value)} className={`${selCls} w-full max-w-[240px] text-center`} aria-label="Time">
+        {nonPresetLabel && (
+          <optgroup label="Current">
+            <option value={nonPresetLabel}>{nonPresetLabel}</option>
+          </optgroup>
+        )}
+        <optgroup label="Clock time">
+          {opts.map((o) => <option key={o} value={o}>{o}</option>)}
+        </optgroup>
+        <optgroup label="Or a label">
+          {LABEL_PRESETS.map((l) => <option key={l} value={l}>{l}</option>)}
+        </optgroup>
+      </select>
+      {startIsClock && (
+        <div className="flex items-center gap-2 text-[13px] font-medium text-ink-faint">
+          <span>to</span>
+          <select value={end} onChange={(e) => changeEnd(e.target.value)} className={`${selCls} text-center`} aria-label="End time">
+            <option value="">no end time</option>
+            {opts.map((o) => <option key={o} value={o}>{o}</option>)}
+          </select>
         </div>
       )}
     </div>
@@ -152,11 +118,11 @@ function BlockEditor({ item, isNew, onSave, onCancel, onDelete }: {
   const [time, setTime] = useState(item.time);
   const [text, setText] = useState(item.text);
   return (
-    <div className="px-4 py-3.5 text-left">
-      <label className={labelCls}>Time</label>
+    <div className="px-4 py-4 text-center">
+      <p className={labelCenter}>Time</p>
       <TimePicker value={time} onChange={setTime} />
-      <label className={`${labelCls} mt-3`}>What's happening</label>
-      <input value={text} onChange={(e) => setText(e.target.value)} className={inputCls} placeholder="Describe this block" />
+      <p className={`${labelCenter} mt-4`}>What's happening</p>
+      <input value={text} onChange={(e) => setText(e.target.value)} className={`${inputCls} text-center`} placeholder="Describe this block" />
       <EditRowButtons onUndo={onCancel} onSave={() => onSave({ time: time.trim(), text: text.trim() })} onDelete={isNew ? undefined : onDelete} />
     </div>
   );
@@ -265,17 +231,8 @@ export default function DayView({
   const [openBlock, setOpenBlock] = useState<number | "new" | null>(null);
   const sun = sunTimes(day.coords, day.date);
 
-  // persist the whole day, overriding just the changed slice
   const persist = (patch: Partial<{ title: string; route: string; warn: string; note: string; cards: BookingCard[]; schedule: ScheduleItem[] }>) => {
-    const m = {
-      title: day.title,
-      route: day.route,
-      warn: day.warn ?? "",
-      note: day.note ?? "",
-      cards: day.cards,
-      schedule: day.schedule,
-      ...patch,
-    };
+    const m = { title: day.title, route: day.route, warn: day.warn ?? "", note: day.note ?? "", cards: day.cards, schedule: day.schedule, ...patch };
     onSave?.({
       title: m.title.trim(),
       route: m.route.trim(),
@@ -320,9 +277,7 @@ export default function DayView({
           <p className="mt-2 text-[11px] text-ink-faint">
             You've edited this day.{" "}
             {onResetDay && (
-              <button type="button" onClick={onResetDay} className="font-medium text-alert-600 underline decoration-alert-300 underline-offset-2">
-                Reset to original
-              </button>
+              <button type="button" onClick={onResetDay} className="font-medium text-alert-600 underline decoration-alert-300 underline-offset-2">Reset to original</button>
             )}
           </p>
         )}
@@ -352,12 +307,7 @@ export default function DayView({
             ),
           )}
           {editable && openCard === "new" && (
-            <BookingEditor
-              card={blankCard}
-              isNew
-              onCancel={() => setOpenCard(null)}
-              onSave={(nc) => { persist({ cards: [...day.cards, nc] }); setOpenCard(null); }}
-            />
+            <BookingEditor card={blankCard} isNew onCancel={() => setOpenCard(null)} onSave={(nc) => { persist({ cards: [...day.cards, nc] }); setOpenCard(null); }} />
           )}
           {editable && openCard !== "new" && (
             <div className="flex justify-center">
@@ -403,12 +353,7 @@ export default function DayView({
             )}
             {editable && openBlock === "new" && (
               <div className={day.schedule.length > 0 ? "border-t border-sand-100" : ""}>
-                <BlockEditor
-                  item={blankItem}
-                  isNew
-                  onCancel={() => setOpenBlock(null)}
-                  onSave={(ni) => { persist({ schedule: [...day.schedule, ni] }); setOpenBlock(null); }}
-                />
+                <BlockEditor item={blankItem} isNew onCancel={() => setOpenBlock(null)} onSave={(ni) => { persist({ schedule: [...day.schedule, ni] }); setOpenBlock(null); }} />
               </div>
             )}
           </div>
