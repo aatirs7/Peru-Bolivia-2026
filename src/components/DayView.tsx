@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowDownUp, Pencil, Plus, Sunrise, Sunset, TriangleAlert } from "lucide-react";
+import { ArrowDownUp, Link2, Pencil, Plus, Sunrise, Sunset, TriangleAlert } from "lucide-react";
 import type { BookingCard, CardKind, Day, ScheduleItem, Status } from "@/types";
 import type { DayOverride } from "@/lib/useDayEdits";
 import type { View } from "@/lib/useView";
 import { sunTimes } from "@/lib/sun";
 import { formatMin, parseTimeField, sortByTime } from "@/lib/timeblocks";
+import AlertNote from "./AlertNote";
 import BookingCardView from "./BookingCard";
+import RichText from "./RichText";
 
 const KIND_OPTIONS: { value: CardKind; label: string }[] = [
   { value: "flight", label: "Flight" },
@@ -108,6 +110,47 @@ function TimePicker({ value, onChange }: { value: string; onChange: (t: string) 
   );
 }
 
+/**
+ * Layman-friendly link builder · type what the link should say, paste the url
+ * (a Google Maps share link, a booking page…), tap Insert. It appends the
+ * `[text](url)` form that RichText renders as a tap-through link.
+ */
+function LinkInserter({ onInsert }: { onInsert: (snippet: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const [label, setLabel] = useState("");
+  const [url, setUrl] = useState("");
+
+  const insert = () => {
+    const u = url.trim();
+    if (!u) return;
+    const full = /^(https?:|mailto:|tel:)/i.test(u) ? u : `https://${u.replace(/^\/+/, "")}`;
+    onInsert(`[${label.trim() || "Open link"}](${full})`);
+    setLabel("");
+    setUrl("");
+    setOpen(false);
+  };
+
+  if (!open)
+    return (
+      <div className="mt-2 flex justify-center">
+        <button type="button" onClick={() => setOpen(true)} className="inline-flex items-center gap-1.5 rounded-lg border border-sand-200 bg-card px-3 py-1.5 text-[12px] font-semibold text-ink-soft active:bg-sand-100">
+          <Link2 size={13} strokeWidth={1.75} aria-hidden /> Add a link
+        </button>
+      </div>
+    );
+
+  return (
+    <div className="mt-2 rounded-lg border border-sand-200 bg-bone/60 p-3">
+      <input value={label} onChange={(e) => setLabel(e.target.value)} className={`${inputCls} text-center`} placeholder="Link text · e.g. Meeting point" />
+      <input value={url} onChange={(e) => setUrl(e.target.value)} inputMode="url" className={`${inputCls} mt-2 text-center`} placeholder="Paste the link · https://…" />
+      <div className="mt-2 flex items-center gap-2">
+        <button type="button" onClick={() => { setOpen(false); setLabel(""); setUrl(""); }} className="flex-1 rounded-lg border border-sand-200 bg-card py-1.5 text-[12.5px] font-semibold text-ink-soft active:bg-sand-100">Cancel</button>
+        <button type="button" onClick={insert} className="flex-1 rounded-lg bg-clay-600 py-1.5 text-[12.5px] font-semibold text-white active:bg-clay-700">Insert</button>
+      </div>
+    </div>
+  );
+}
+
 function BlockEditor({ item, isNew, onSave, onCancel, onDelete }: {
   item: ScheduleItem;
   isNew?: boolean;
@@ -117,13 +160,22 @@ function BlockEditor({ item, isNew, onSave, onCancel, onDelete }: {
 }) {
   const [time, setTime] = useState(item.time);
   const [text, setText] = useState(item.text);
+  const [alert, setAlert] = useState(item.alert ?? "");
   return (
     <div className="px-4 py-4 text-center">
       <p className={labelCenter}>Time</p>
       <TimePicker value={time} onChange={setTime} />
       <p className={`${labelCenter} mt-4`}>What's happening</p>
-      <input value={text} onChange={(e) => setText(e.target.value)} className={`${inputCls} text-center`} placeholder="Describe this block" />
-      <EditRowButtons onUndo={onCancel} onSave={() => onSave({ time: time.trim(), text: text.trim() })} onDelete={isNew ? undefined : onDelete} />
+      <textarea value={text} onChange={(e) => setText(e.target.value)} rows={2} className={`${inputCls} resize-none text-center`} placeholder="Describe this block" />
+      <LinkInserter onInsert={(s) => setText((t) => (t.trim() ? `${t.trim()} ${s}` : s))} />
+      <p className={`${labelCenter} mt-4 text-alert-600`}>Reminder (optional)</p>
+      <input value={alert} onChange={(e) => setAlert(e.target.value)} className={`${inputCls} text-center`} placeholder="e.g. Bring original passports" />
+      <p className="mt-1 text-[11px] leading-snug text-ink-faint">Shows as a red-orange badge under this block. Leave blank for none.</p>
+      <EditRowButtons
+        onUndo={onCancel}
+        onSave={() => onSave({ time: time.trim(), text: text.trim(), alert: alert.trim() || undefined })}
+        onDelete={isNew ? undefined : onDelete}
+      />
     </div>
   );
 }
@@ -157,6 +209,16 @@ function BookingEditor({ card, isNew, onSave, onCancel, onDelete }: {
       <input value={c.title} onChange={(e) => patch({ title: e.target.value })} className={inputCls} placeholder="e.g. JetSMART · direct" />
       <label className={`${labelCls} mt-3`}>Details (one per line)</label>
       <textarea value={c.lines.join("\n")} onChange={(e) => patch({ lines: e.target.value.split("\n") })} rows={2} className={`${inputCls} resize-none`} placeholder="Times, addresses, what's included..." />
+      <LinkInserter onInsert={(s) => setC((x) => {
+        const lines = [...x.lines];
+        const i = lines.length - 1;
+        if (i >= 0 && lines[i].trim()) lines[i] = `${lines[i].trim()} ${s}`;
+        else if (i >= 0) lines[i] = s;
+        else lines.push(s);
+        return { ...x, lines };
+      })} />
+      <label className={`${labelCls} mt-3 text-alert-600`}>Reminder (red-orange badge)</label>
+      <input value={c.alert ?? ""} onChange={(e) => patch({ alert: e.target.value })} className={inputCls} placeholder="e.g. Bring original passports · blank for none" />
       <div className="mt-3 grid grid-cols-2 gap-2">
         <div><label className={labelCls}>Ref (lead)</label><input value={c.ref ?? ""} onChange={(e) => patch({ ref: e.target.value })} className={inputCls} /></div>
         <div><label className={labelCls}>PIN (lead)</label><input value={c.pin ?? ""} onChange={(e) => patch({ pin: e.target.value })} className={inputCls} /></div>
@@ -165,7 +227,7 @@ function BookingEditor({ card, isNew, onSave, onCancel, onDelete }: {
       <input value={c.bookedVia ?? ""} onChange={(e) => patch({ bookedVia: e.target.value })} className={inputCls} />
       <label className={`${labelCls} mt-3`}>Lead note</label>
       <input value={c.leadNote ?? ""} onChange={(e) => patch({ leadNote: e.target.value })} className={inputCls} />
-      <EditRowButtons onUndo={onCancel} onSave={() => onSave(c)} onDelete={isNew ? undefined : onDelete} />
+      <EditRowButtons onUndo={onCancel} onSave={() => onSave({ ...c, alert: c.alert?.trim() || undefined })} onDelete={isNew ? undefined : onDelete} />
     </div>
   );
 }
@@ -183,8 +245,10 @@ function HeaderEditor({ day, onSave, onCancel }: { day: Day; onSave: (m: { title
       <input value={route} onChange={(e) => setRoute(e.target.value)} className={inputCls} />
       <label className={`${labelCls} mt-3`}>Warning (amber banner)</label>
       <textarea value={warn} onChange={(e) => setWarn(e.target.value)} rows={2} className={`${inputCls} resize-none`} placeholder="Leave blank for none" />
+      <LinkInserter onInsert={(s) => setWarn((t) => (t.trim() ? `${t.trim()} ${s}` : s))} />
       <label className={`${labelCls} mt-3`}>Note (italic footnote)</label>
       <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={2} className={`${inputCls} resize-none`} placeholder="Leave blank for none" />
+      <LinkInserter onInsert={(s) => setNote((t) => (t.trim() ? `${t.trim()} ${s}` : s))} />
       <EditRowButtons onUndo={onCancel} onSave={() => onSave({ title, route, warn, note })} />
     </div>
   );
@@ -239,7 +303,7 @@ export default function DayView({
       warn: m.warn.trim(),
       note: m.note.trim(),
       cards: m.cards.filter((c) => c.title.trim() || c.lines.some((l) => l.trim())).map((c) => ({ ...c, lines: c.lines.filter((l) => l.trim()) })),
-      schedule: m.schedule.filter((s) => s.time.trim() || s.text.trim()),
+      schedule: m.schedule.filter((s) => s.time.trim() || s.text.trim() || s.alert?.trim()),
     });
   };
 
@@ -322,7 +386,7 @@ export default function DayView({
       {day.warn && (
         <div className="mt-3 flex items-start justify-center gap-2 rounded-xl border border-gold-400/30 bg-gold-100/40 px-4 py-3 text-center text-[13px] leading-snug text-ink-soft dark:border-gold-400/20 dark:bg-gold-400/10">
           <TriangleAlert size={15} strokeWidth={1.75} className="mt-0.5 shrink-0 text-gold-600 dark:text-gold-400" aria-hidden />
-          <span>{day.warn}</span>
+          <span><RichText text={day.warn} /></span>
         </div>
       )}
 
@@ -345,7 +409,10 @@ export default function DayView({
                 <div key={i} className={`flex items-center gap-2 px-3 py-3.5 ${i > 0 ? "border-t border-sand-100" : ""}`}>
                   <div className="min-w-0 flex-1 text-center">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.06em] tabular-nums text-clay-500">{item.time}</p>
-                    <p className="mt-1 text-[13.5px] leading-snug text-ink-soft">{item.text}</p>
+                    <p className="mt-1 text-[13.5px] leading-snug text-ink-soft">
+                      <RichText text={item.text} />
+                    </p>
+                    {item.alert && <AlertNote text={item.alert} className="mt-2" />}
                   </div>
                   {editable && <PencilBtn onClick={() => { closeAll(); setOpenBlock(i); }} label={`Edit time block ${i + 1}`} />}
                 </div>
@@ -372,7 +439,11 @@ export default function DayView({
         </div>
       )}
 
-      {day.note && <p className="mt-5 text-center text-[12.5px] italic leading-relaxed text-ink-faint">{day.note}</p>}
+      {day.note && (
+        <p className="mt-5 text-center text-[12.5px] italic leading-relaxed text-ink-faint">
+          <RichText text={day.note} />
+        </p>
+      )}
     </section>
   );
 }

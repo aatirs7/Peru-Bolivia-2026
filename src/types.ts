@@ -18,11 +18,15 @@ export interface BookingCard {
   leadNote?: string;
   /** Optional map pin · cards without one simply don't show the Directions link. */
   place?: Place;
+  /** Optional red-orange reminder badge shown to everyone. */
+  alert?: string;
 }
 
 export interface ScheduleItem {
   time: string;
   text: string;
+  /** Optional red-orange reminder badge, e.g. "Bring original passports". */
+  alert?: string;
 }
 
 export interface Coords {

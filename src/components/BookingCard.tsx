@@ -9,7 +9,9 @@ import {
 } from "lucide-react";
 import type { BookingCard as Card, CardKind } from "@/types";
 import type { View } from "@/lib/useView";
+import AlertNote from "./AlertNote";
 import MapLink from "./MapLink";
+import RichText from "./RichText";
 import StatusPill from "./StatusPill";
 
 const kindIcon: Record<CardKind, LucideIcon> = {
@@ -46,10 +48,12 @@ export default function BookingCard({ card, view }: { card: Card; view: View }) 
       <ul className="mt-2.5 space-y-1">
         {card.lines.map((line, i) => (
           <li key={i} className="text-[13px] leading-snug text-ink-soft">
-            {line}
+            <RichText text={line} />
           </li>
         ))}
       </ul>
+
+      {card.alert && <AlertNote text={card.alert} className="mt-3" />}
 
             {card.place && (
         <div className="mt-3">
@@ -81,7 +85,11 @@ export default function BookingCard({ card, view }: { card: Card; view: View }) 
                 <dd className="inline">{card.bookedVia}</dd>
               </div>
             )}
-            {card.leadNote && <div className="pt-0.5">{card.leadNote}</div>}
+            {card.leadNote && (
+              <div className="pt-0.5">
+                <RichText text={card.leadNote} />
+              </div>
+            )}
           </dl>
         </div>
       )}
