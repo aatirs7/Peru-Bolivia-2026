@@ -50,7 +50,17 @@ export default async function handler(req: any, res: any) {
         cards: Array.isArray(override.cards) ? override.cards.slice(0, 40) : undefined,
         updatedAt: new Date().toISOString(),
       };
-      await put(`dayedits/${idx}.json`, JSON.stringify(record), {
+      const body = JSON.stringify(record);
+      // append-only history first · a later overwrite or reset can always be
+      // recovered, since the typed-in plan exists nowhere else
+      try {
+        await put(`dayedits-history/${idx}/${record.updatedAt.replace(/[:.]/g, "-")}.json`, body, {
+          access: "private",
+          contentType: "application/json",
+          addRandomSuffix: true,
+        });
+      } catch {}
+      await put(`dayedits/${idx}.json`, body, {
         access: "private",
         contentType: "application/json",
         addRandomSuffix: false,
