@@ -1,5 +1,12 @@
-import { del, list } from "@vercel/blob";
+﻿import { del, get, list } from "@vercel/blob";
 import webpush from "web-push";
+
+/** Read one private blob back as JSON. */
+async function readJson(pathname: string) {
+  const r = await get(pathname, { access: "private" });
+  if (!r || r.statusCode !== 200) throw new Error("blob missing");
+  return await new Response(r.stream).json();
+}
 
 /**
  * Flattened alert schedule · KEEP IN SYNC with src/data/alerts.ts (the
@@ -77,7 +84,7 @@ export default async function handler(req: any, res: any) {
 
   for (const blob of blobs) {
     try {
-      const stored = await fetch(blob.url).then((r) => r.json());
+      const stored: any = await readJson(blob.pathname);
       const audience: string = stored.audience === "lead" ? "lead" : "all";
       const mine = due.filter((a) => a.audience === "all" || audience === "lead");
       if (mine.length === 0) continue;
@@ -95,7 +102,7 @@ export default async function handler(req: any, res: any) {
       // 404/410 · the subscription is dead, clean it up
       if (err?.statusCode === 404 || err?.statusCode === 410) {
         try {
-          await del(blob.url);
+          await del(blob.pathname);
           removed++;
         } catch {}
       }

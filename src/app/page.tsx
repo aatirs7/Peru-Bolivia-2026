@@ -303,6 +303,7 @@ export default function Page() {
                 if (d) openExplore(d.id);
               }}
               edited={dayEdited}
+              pending={!!ov?.dirty}
               editable={view === "lead"}
               onSave={(patch) => saveDay(idx, patch)}
               onResetDay={() => resetDay(idx)}

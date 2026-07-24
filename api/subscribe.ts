@@ -1,4 +1,4 @@
-import { put } from "@vercel/blob";
+﻿import { put } from "@vercel/blob";
 
 export const config = { maxDuration: 10 };
 
@@ -9,7 +9,7 @@ export function subId(endpoint: string): string {
 
 export default async function handler(req: any, res: any) {
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    return res.status(503).json({ error: "storage not connected · link the peru-push-subs Blob store to the project and redeploy" });
+    return res.status(503).json({ error: "storage not connected" });
   }
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
   const { subscription, audience } = req.body ?? {};
@@ -24,7 +24,7 @@ export default async function handler(req: any, res: any) {
       addedAt: new Date().toISOString(),
     }),
     {
-      access: "public",
+      access: "private",
       contentType: "application/json",
       addRandomSuffix: false,
       allowOverwrite: true,

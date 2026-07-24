@@ -1,4 +1,15 @@
-import { del, list, put } from "@vercel/blob";
+﻿import { del, get, list, put } from "@vercel/blob";
+
+/** Read one private blob back as JSON. */
+async function readJson(pathname: string) {
+  try {
+    // useCache: false · a family phone must never get a stale copy of the plan
+    const r = await get(pathname, { access: "private", useCache: false });
+    return r && r.statusCode === 200 ? await new Response(r.stream).json() : null;
+  } catch {
+    return null;
+  }
+}
 
 export const config = { maxDuration: 15 };
 
@@ -14,14 +25,12 @@ const cleanIdx = (v: unknown): number | null =>
 
 export default async function handler(req: any, res: any) {
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    return res.status(503).json({ error: "storage not connected · link the peru-push-subs Blob store to the project and redeploy" });
+    return res.status(503).json({ error: "storage not connected" });
   }
 
   if (req.method === "GET") {
     const { blobs } = await list({ prefix: "dayedits/" });
-    const items = await Promise.all(
-      blobs.map((b) => fetch(b.url).then((r) => r.json()).catch(() => null)),
-    );
+    const items = await Promise.all(blobs.map((b) => readJson(b.pathname)));
     return res.status(200).json({ overrides: items.filter(Boolean) });
   }
 
@@ -42,7 +51,7 @@ export default async function handler(req: any, res: any) {
         updatedAt: new Date().toISOString(),
       };
       await put(`dayedits/${idx}.json`, JSON.stringify(record), {
-        access: "public",
+        access: "private",
         contentType: "application/json",
         addRandomSuffix: false,
         allowOverwrite: true,

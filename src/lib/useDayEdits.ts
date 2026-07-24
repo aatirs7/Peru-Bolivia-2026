@@ -108,19 +108,26 @@ export function useDayEdits(): {
       deletedIdx.forEach((idx) => delete afterPush[idx]);
       saveMap(afterPush);
 
-      // pull the server list; local dirty overrides win
+      // pull the server list · the lead's saved plan is the source of truth
       let serverList: DayOverride[] | null = null;
       try {
-        const res = await fetch("/api/dayedits");
+        const res = await fetch("/api/dayedits", { cache: "no-store" });
         if (res.ok) serverList = (await res.json()).overrides ?? null;
       } catch {}
 
       let merged = afterPush;
       if (serverList) {
         merged = { ...afterPush };
+        const onServer = new Set<number>();
         for (const s of serverList) {
+          onServer.add(s.dayIdx);
           if (!merged[s.dayIdx]?.dirty) merged[s.dayIdx] = { ...s, dirty: false };
         }
+        // a day the lead reset is gone from the server · drop our clean copy too
+        Object.keys(merged).forEach((k) => {
+          const i = Number(k);
+          if (!onServer.has(i) && !merged[i].dirty) delete merged[i];
+        });
         saveMap(merged);
       }
       setOverrides(merged);
@@ -133,9 +140,20 @@ export function useDayEdits(): {
   useEffect(() => {
     setOverrides(loadMap());
     void sync();
+    // refresh when wifi returns and whenever the app is brought back to the
+    // foreground, so a family phone left open still picks up the lead's edits
     const onOnline = () => void sync();
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void sync();
+    };
     window.addEventListener("online", onOnline);
-    return () => window.removeEventListener("online", onOnline);
+    window.addEventListener("focus", onVisible);
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.removeEventListener("online", onOnline);
+      window.removeEventListener("focus", onVisible);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
   }, [sync]);
 
   const saveDay = useCallback(

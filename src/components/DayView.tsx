@@ -277,6 +277,7 @@ export default function DayView({
   exploreName,
   onExplore,
   edited,
+  pending,
   editable,
   onSave,
   onResetDay,
@@ -286,6 +287,8 @@ export default function DayView({
   exploreName?: string;
   onExplore?: () => void;
   edited?: boolean;
+  /** This day's edit hasn't reached the server yet. */
+  pending?: boolean;
   editable?: boolean;
   onSave?: (patch: Omit<DayOverride, "dayIdx" | "updatedAt" | "dirty">) => void;
   onResetDay?: () => void;
@@ -339,7 +342,7 @@ export default function DayView({
 
         {edited && editable && (
           <p className="mt-2 text-[11px] text-ink-faint">
-            You've edited this day.{" "}
+            {pending ? "Saved on this phone · syncing to the family when you're online." : "Saved for everyone."}{" "}
             {onResetDay && (
               <button type="button" onClick={onResetDay} className="font-medium text-alert-600 underline decoration-alert-300 underline-offset-2">Reset to original</button>
             )}
