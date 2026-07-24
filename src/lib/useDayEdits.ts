@@ -31,8 +31,16 @@ function loadMap(): Record<number, DayOverride> {
   }
 }
 
+/**
+ * Persist the overlay. If a write would drop days that were here before, the
+ * previous map is snapshotted to `trip.dayedits.bak` first · a sync bug must
+ * never be able to destroy the lead's typed-in plan.
+ */
 function saveMap(m: Record<number, DayOverride>) {
   try {
+    const prev = loadMap();
+    const lost = Object.keys(prev).filter((k) => !(k in m));
+    if (lost.length > 0) localStorage.setItem(`${KEY}.bak`, JSON.stringify(prev));
     localStorage.setItem(KEY, JSON.stringify(m));
   } catch {}
 }
@@ -100,11 +108,7 @@ export function useDayEdits(): {
         }
       }
 
-      // apply push results to a fresh read
       const afterPush = loadMap();
-      syncedIdx.forEach((idx) => {
-        if (afterPush[idx]) afterPush[idx].dirty = false;
-      });
       deletedIdx.forEach((idx) => delete afterPush[idx]);
       saveMap(afterPush);
 
@@ -118,16 +122,13 @@ export function useDayEdits(): {
       let merged = afterPush;
       if (serverList) {
         merged = { ...afterPush };
-        const onServer = new Set<number>();
         for (const s of serverList) {
-          onServer.add(s.dayIdx);
-          if (!merged[s.dayIdx]?.dirty) merged[s.dayIdx] = { ...s, dirty: false };
+          // an edit stays dirty until the server actually reads it back ·
+          // list() is eventually consistent, so "POST returned ok" is not
+          // proof the day is stored, and clearing dirty early risks losing it
+          if (syncedIdx.has(s.dayIdx)) merged[s.dayIdx] = { ...s, dirty: false };
+          else if (!merged[s.dayIdx]?.dirty) merged[s.dayIdx] = { ...s, dirty: false };
         }
-        // a day the lead reset is gone from the server · drop our clean copy too
-        Object.keys(merged).forEach((k) => {
-          const i = Number(k);
-          if (!onServer.has(i) && !merged[i].dirty) delete merged[i];
-        });
         saveMap(merged);
       }
       setOverrides(merged);
